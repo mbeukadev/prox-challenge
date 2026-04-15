@@ -1,0 +1,232 @@
+{
+  "setup_procedures": {
+    "MIG": {
+      "process_name": "MIG (Gas Metal Arc Welding / GMAW)",
+      "polarity": "DCEP",
+      "cable_setup": {
+        "ground_clamp": "Negative (-) Socket",
+        "wire_feed_power": "Positive (+) Socket",
+        "mig_gun": "Connected to Wire Feed mechanism via Cable Connector"
+      },
+      "gas_required": true,
+      "gas_type": "C25 (75% Argon / 25% CO2) for steel, Stainless Tri-Mix for stainless steel, 100% Argon for aluminum (spool gun)",
+      "gas_flow": "20-30 SCFH",
+      "wire_type": "Solid core",
+      "wire_sizes": ["0.025\"", "0.030\"", "0.035\""],
+      "feed_roller": "V-Groove (smooth)",
+      "feed_tension": "3-5 (for solid wire)",
+      "gun_angle": "Push angle: 0-15° away from weld direction",
+      "ctwd": "1/2\" or less (Contact Tip to Work Distance)",
+      "steps": [
+        "Turn Power Switch OFF and unplug Welder",
+        "Open door via Door Latch",
+        "Install wire spool (must unwind clockwise)",
+        "Check feed roller matches wire size (V-Groove for solid core)",
+        "Insert Gun Cable Connector into Wire Feed mechanism — must be FULLY inserted or gas will leak",
+        "Connect Wire Feed Control Cable to socket inside machine",
+        "Plug Ground Clamp Cable into Negative (-) Socket",
+        "Plug Wire Feed Power Cable into Positive (+) Socket",
+        "Set up shielding gas: mount cylinder, attach regulator, connect gas hose to welder gas inlet",
+        "Cut bent/crimped wire end, feed 12\" into Wire Inlet Liner",
+        "Set wire in Feed Roller groove, latch Feed Tensioner",
+        "Remove Nozzle and Contact Tip from MIG Gun",
+        "Lay MIG Gun cable straight, plug in power cord",
+        "Press Cold Wire Feed Switch until wire feeds through 2 inches",
+        "Test tension: feed wire against wood block at 2-3 inches, wire should bend not stop",
+        "Replace Contact Tip (correct size for wire), replace Nozzle",
+        "Cut wire to 1/2\" stickout",
+        "Close door securely"
+      ],
+      "settings_sequence": [
+        "Press Home Button",
+        "Turn Main Control Knob to MIG process",
+        "Press Main Control Knob to select",
+        "Confirm polarity and gas on screen",
+        "Turn Left Knob to set wire diameter",
+        "Turn Right Knob to set material thickness",
+        "Auto weld settings: Left Knob = Wire Feed Speed (Amperage), Right Knob = Voltage"
+      ],
+      "optional_settings": ["Run-In WFS", "Inductance", "Spot Timer", "Recall Setting", "Save Setting"],
+      "manual_pages": [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]
+    },
+
+    "Flux-Cored": {
+      "process_name": "Flux-Cored (Flux-Cored Arc Welding / FCAW)",
+      "polarity": "DCEN",
+      "cable_setup": {
+        "ground_clamp": "Positive (+) Socket",
+        "wire_feed_power": "Negative (-) Socket",
+        "mig_gun": "Connected to Wire Feed mechanism via Cable Connector"
+      },
+      "gas_required": false,
+      "gas_type": null,
+      "wire_type": "Flux-cored (self-shielded)",
+      "wire_sizes": ["0.030\"", "0.035\"", "0.045\""],
+      "feed_roller": "Knurled Groove",
+      "feed_tension": "2-3 (for flux-cored wire — too much force will crush it)",
+      "gun_angle": "Drag angle: 0-15° toward weld direction",
+      "ctwd": "1/2\" or less",
+      "steps": [
+        "Turn Power Switch OFF and unplug Welder",
+        "Open door via Door Latch",
+        "Install wire spool (must unwind clockwise)",
+        "Check feed roller matches wire size (Knurled Groove for flux-cored)",
+        "Insert Gun Cable Connector into Wire Feed mechanism — must be FULLY inserted",
+        "Connect Wire Feed Control Cable to socket inside machine",
+        "Plug Ground Clamp Cable into Positive (+) Socket — NOTE: opposite of MIG",
+        "Plug Wire Feed Power Cable into Negative (-) Socket — NOTE: opposite of MIG",
+        "NO gas setup needed",
+        "Cut bent/crimped wire end, feed 12\" into Wire Inlet Liner",
+        "Set wire in Feed Roller groove, latch Feed Tensioner (tension 2-3, lower than solid wire)",
+        "Remove Nozzle and Contact Tip from MIG Gun",
+        "Lay MIG Gun cable straight, plug in power cord",
+        "Press Cold Wire Feed Switch until wire feeds through 2 inches",
+        "Test tension: feed wire against wood block at 2-3 inches",
+        "Replace Contact Tip (correct size), replace Nozzle",
+        "Cut wire to 1/2\" stickout",
+        "Close door securely"
+      ],
+      "key_difference_from_mig": "Polarity is REVERSED compared to MIG. Ground goes to Positive, Wire Feed goes to Negative. No gas needed.",
+      "manual_pages": [10, 11, 12, 13, 15, 16, 17, 18, 19, 20, 21, 22, 23]
+    },
+
+    "TIG": {
+      "process_name": "TIG (Gas Tungsten Arc Welding / GTAW)",
+      "polarity": "DCEN",
+      "cable_setup": {
+        "ground_clamp": "Positive (+) Socket",
+        "tig_torch": "Negative (-) Socket",
+        "foot_pedal": "Foot Pedal Socket inside Welder (optional)"
+      },
+      "gas_required": true,
+      "gas_type": "100% Argon",
+      "gas_flow": "10-25 SCFH",
+      "arc_start_method": "Lift-style TIG: push Foot Pedal and touch Electrode to workpiece, then lift. Without pedal: touch and lift.",
+      "electrode_type": "Tungsten (sold separately)",
+      "electrode_protrusion": "1/8\" to 1/4\" beyond Ceramic Nozzle",
+      "electrode_tip": "Grind to blunt point, conical portion 2.5x electrode diameter. Grinding direction parallel to length.",
+      "torch_assembly": ["Thread Collet Body into front of Torch", "Thread Ceramic Nozzle onto Collet Body", "Insert Collet into back of Torch", "Insert Tungsten Electrode into Collet", "Lock with Back Cap"],
+      "torch_distance": "1 to 1.5 times the diameter of the Electrode",
+      "steps": [
+        "Turn Power Switch OFF and unplug Welder",
+        "Plug Ground Clamp Cable into Positive (+) Socket, twist clockwise to lock",
+        "Plug TIG Torch Cable into Negative (-) Socket, twist clockwise to lock",
+        "Connect Foot Pedal Cable through front hole to Foot Pedal Socket inside machine (optional)",
+        "Set up 100% Argon cylinder: mount, clean valve, attach regulator, connect gas hose from TIG Torch to regulator outlet",
+        "Assemble TIG Torch: Collet Body → Ceramic Nozzle → Collet → Tungsten Electrode → Back Cap",
+        "Sharpen tungsten electrode to blunt conical point",
+        "Plug in power cord (do NOT plug into wall yet)",
+        "Plug into wall outlet, turn Power Switch ON",
+        "Select TIG process on LCD, set rod diameter and material thickness",
+        "Turn Right Knob to ON to energize TIG Torch — WARNING: OCV now present",
+        "Open gas cylinder valve all the way, set flow to 10-25 SCFH",
+        "Open valve on TIG Torch to start gas flow",
+        "Initiate arc: push Foot Pedal + touch electrode to workpiece + lift"
+      ],
+      "welding_technique": {
+        "torch_angle": "Tilt backward 10-15° from vertical",
+        "filler_addition": "Add TIG Rod to front end of weld puddle. Remove rod each time electrode is advanced but keep within gas shield.",
+        "finishing": "Release Foot Pedal but keep Torch on weld puddle until solidified"
+      },
+      "optional_settings": ["Recall Setting", "Save Setting"],
+      "manual_pages": [24, 25, 26, 30, 31]
+    },
+
+    "Stick": {
+      "process_name": "Stick (Shielded Metal Arc Welding / SMAW)",
+      "polarity": "DCEP",
+      "cable_setup": {
+        "ground_clamp": "Negative (-) Socket",
+        "electrode_holder": "Positive (+) Socket"
+      },
+      "gas_required": false,
+      "gas_type": null,
+      "electrode_types": ["60xx series", "70xx series"],
+      "steps": [
+        "Turn Power Switch OFF and unplug Welder",
+        "Plug Ground Clamp Cable into Negative (-) Socket, twist clockwise to lock",
+        "Plug Electrode Holder Cable into Positive (+) Socket, twist clockwise to lock",
+        "Plug power cord into Power Input Socket",
+        "Set Electrode Holder on nonconductive, nonflammable surface",
+        "Plug into wall outlet, turn Power Switch ON",
+        "Select Stick process on LCD",
+        "Set electrode type (60xx or 70xx), diameter, and material thickness",
+        "Turn Right Knob to ON to energize Electrode Holder — WARNING: OCV now present",
+        "Place bare metal end of Stick Electrode into Electrode Holder jaws",
+        "Stroke workpiece lightly to ignite arc"
+      ],
+      "welding_technique": {
+        "arc_ignition": ["Tap the surface with Electrode", "Stroke the surface", "Strike like a match"],
+        "arc_distance": "Same distance as diameter of bare metal end of electrode",
+        "electrode_angle": "Tilt back 10-20°",
+        "bead_direction": "Drag Electrode to back end of weld puddle"
+      },
+      "optional_settings": ["Hot Start", "Arc Force", "Recall Setting", "Save Setting"],
+      "setup_time": "~30 seconds (fastest of all processes)",
+      "manual_pages": [27, 28, 29, 32, 33]
+    }
+  },
+
+  "polarity_summary": {
+    "description": "Critical: each process requires different cable configurations. Wrong polarity causes porosity, poor penetration, and excessive spatter.",
+    "configurations": [
+      {
+        "process": "MIG (solid wire + gas)",
+        "polarity_name": "DCEP",
+        "ground_clamp_socket": "Negative (-)",
+        "work_cable_socket": "Positive (+)",
+        "work_cable_name": "Wire Feed Power Cable"
+      },
+      {
+        "process": "Flux-Cored (gasless)",
+        "polarity_name": "DCEN",
+        "ground_clamp_socket": "Positive (+)",
+        "work_cable_socket": "Negative (-)",
+        "work_cable_name": "Wire Feed Power Cable"
+      },
+      {
+        "process": "TIG",
+        "polarity_name": "DCEN",
+        "ground_clamp_socket": "Positive (+)",
+        "work_cable_socket": "Negative (-)",
+        "work_cable_name": "TIG Torch Cable"
+      },
+      {
+        "process": "Stick",
+        "polarity_name": "DCEP",
+        "ground_clamp_socket": "Negative (-)",
+        "work_cable_socket": "Positive (+)",
+        "work_cable_name": "Electrode Holder Cable"
+      }
+    ]
+  },
+
+  "wire_spool_setup": {
+    "1_2_lb_spool": {
+      "steps": ["Remove Wingnut and Spacer", "Place spool over Spindle against Brake Pad", "Spool must unwind CLOCKWISE", "Replace Spacer, secure with Wingnut"],
+      "warning": "If Wire Spool can spin freely, Wingnut is too loose. Wire will unravel and cause tangling."
+    },
+    "10_12_lb_spool": {
+      "steps": ["Remove Wingnut and Spacer", "Place Spool Adapter over Spindle against Brake Pad", "Place spool over Adapter, align pin with hole", "Spool must unwind CLOCKWISE", "Replace Spacer, secure with Wingnut", "Screw Spool Knob into Adapter"],
+      "warning": "Same as above — Wingnut must be snug."
+    }
+  },
+
+  "feed_roller_guide": {
+    "solid_core": {
+      "roller_type": "V-Groove (smooth)",
+      "sizes": {
+        "side_1": "0.025\"",
+        "side_2": "0.030\" / 0.035\""
+      }
+    },
+    "flux_cored": {
+      "roller_type": "Knurled Groove",
+      "sizes": {
+        "side_1": "0.030\" / 0.035\"",
+        "side_2": "0.045\""
+      }
+    },
+    "change_procedure": ["Unscrew Feed Roller Knob counterclockwise", "Remove knob to expose Feed Roller", "Flip or replace roller — confirm correct type and size matches wire", "Screw Feed Roller Knob back in"]
+  }
+}

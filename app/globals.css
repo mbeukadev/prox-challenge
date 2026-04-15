@@ -1,0 +1,65 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html,
+body {
+  height: 100%;
+  background: #0e1218;
+  color: #f0f4f8;
+  font-family: Inter, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* Scrollbar — thin, dark */
+::-webkit-scrollbar         { width: 4px; }
+::-webkit-scrollbar-track   { background: transparent; }
+::-webkit-scrollbar-thumb   { background: #243040; border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: #2d3f52; }
+
+/* ── Message prose ───────────────────────────────────────────────────────── */
+.message-content p               { margin-bottom: 0.6rem; }
+.message-content p:last-child    { margin-bottom: 0; }
+.message-content ul,
+.message-content ol              { margin: 0.4rem 0 0.6rem 1.2rem; }
+.message-content li              { margin-bottom: 0.2rem; }
+.message-content strong          { color: #f0f4f8; font-weight: 600; }
+.message-content code {
+  background: #1a2332;
+  border: 1px solid #243040;
+  padding: 0.1rem 0.35rem;
+  border-radius: 4px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8em;
+  color: #5eead4;
+}
+.message-content pre {
+  background: #0e1218;
+  border: 1px solid #1e2b3a;
+  border-radius: 6px;
+  padding: 0.9rem 1rem;
+  overflow-x: auto;
+  margin: 0.6rem 0;
+}
+.message-content pre code {
+  background: none;
+  border: none;
+  padding: 0;
+  color: #f0f4f8;
+}
+.message-content h1,
+.message-content h2,
+.message-content h3 {
+  color: #f0f4f8;
+  font-weight: 600;
+  margin: 0.9rem 0 0.4rem;
+}

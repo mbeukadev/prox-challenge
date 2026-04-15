@@ -1,0 +1,153 @@
+{
+  "process_selection": {
+    "description": "Decision matrix for choosing the right welding process based on user needs. Extracted from the selection chart and manual specifications.",
+
+    "by_process": {
+      "Flux-Cored": {
+        "also_known_as": "FCAW (Flux-Cored Arc Welding)",
+        "skill_level": "Low (beginner-friendly)",
+        "shielding_gas": "None required (self-shielded)",
+        "materials": ["Steel", "Stainless Steel"],
+        "thickness_range": "18 Gauge to 5/16\"",
+        "typical_applications": ["Galvanized steel", "General fabrication", "Pipe and tubing", "Maintenance and repair"],
+        "weld_cleanliness": "More spatter (slag must be chipped off)",
+        "advantages": ["Ideal for outdoor or windy conditions", "Forgiving on rusty or dirty steels", "Good out-of-position welding", "High deposition rates"],
+        "best_for": "Beginners, outdoor work, dirty/rusty metal, general fabrication"
+      },
+      "MIG": {
+        "also_known_as": "GMAW (Gas Metal Arc Welding)",
+        "skill_level": "Low to Moderate",
+        "shielding_gas": "Required (indoor welding recommended)",
+        "gas_options": {
+          "steel": "C25 (75% Argon / 25% CO2) or 100% CO2",
+          "stainless_steel": "Stainless Tri-Mix",
+          "aluminum": "100% Argon (requires optional Spool Gun)"
+        },
+        "materials": ["Steel", "Stainless Steel", "Aluminum (with Spool Gun)"],
+        "thickness_range": "22 Gauge to 3/8\"",
+        "typical_applications": ["Sheet metal", "Automotive body", "Tubing", "Structural steel"],
+        "weld_cleanliness": "Clean / minimal spatter (no slag)",
+        "advantages": ["Fast production (high welding speeds)", "Easiest to learn", "Clean welds with no slag", "Better control on thin materials"],
+        "best_for": "Clean indoor work, thin materials, automotive, sheet metal, production speed"
+      },
+      "Stick": {
+        "also_known_as": "SMAW (Shielded Metal Arc Welding)",
+        "skill_level": "Moderate (easiest setup, moderate technique)",
+        "shielding_gas": "None required",
+        "materials": ["Steel", "Stainless Steel", "Castings"],
+        "thickness_range": "10 Gauge to 1/2\"",
+        "typical_applications": ["Pipe and tubing", "Structural steel", "Pressure vessels", "Maintenance and repair"],
+        "weld_cleanliness": "More spatter (slag must be chipped off)",
+        "advantages": ["Ideal for outdoor or windy conditions", "Forgiving on rusty or dirty steels", "Deep penetration", "Good for thicker materials"],
+        "best_for": "Thicker materials, outdoor work, structural steel, repair work"
+      },
+      "TIG": {
+        "also_known_as": "GTAW (Gas Tungsten Arc Welding)",
+        "skill_level": "High (most difficult to learn)",
+        "shielding_gas": "Required (100% Argon)",
+        "materials": {
+          "dc_tig": ["Steel", "Stainless Steel", "Chrome Moly"],
+          "ac_tig": ["Aluminum", "Magnesium Alloys (requires AC TIG — not available on this machine's DC-only TIG)"]
+        },
+        "thickness_range": "24 Gauge to 3/16\"",
+        "typical_applications": ["Stainless steel exhausts", "Bicycle frames", "Thin wall pipe and tubing", "Metal art"],
+        "weld_cleanliness": "Extremely clean",
+        "advantages": ["Highest quality welds", "Extremely aesthetic weld appearance", "Can be used on a variety of materials", "Precise control"],
+        "best_for": "Precision work, thin materials, aesthetics, stainless steel, chrome moly",
+        "limitations_on_this_machine": "DC TIG only (lift-start). No AC TIG for aluminum. No high-frequency start. Training beyond manual scope required."
+      }
+    },
+
+    "by_material": {
+      "mild_steel": {
+        "recommended_processes": ["MIG", "Flux-Cored", "Stick", "TIG"],
+        "best_choice_thin": "MIG (22ga - 3/8\", cleanest on thin material)",
+        "best_choice_thick": "Stick (10ga - 1/2\", deepest penetration)",
+        "best_choice_outdoor": "Flux-Cored or Stick (no gas needed)",
+        "best_choice_beginner": "MIG (easiest to learn) or Flux-Cored (no gas setup)"
+      },
+      "stainless_steel": {
+        "recommended_processes": ["MIG", "Flux-Cored", "Stick", "TIG"],
+        "best_choice_appearance": "TIG (extremely clean, aesthetic welds)",
+        "best_choice_production": "MIG with Stainless Tri-Mix gas",
+        "note": "Stainless wire is less flexible — keep gun cable straight during feeding"
+      },
+      "aluminum": {
+        "recommended_processes": ["MIG (with Spool Gun)"],
+        "requirements": "Optional Spool Gun (sold separately) + 100% Argon gas",
+        "note": "AC TIG would be ideal for aluminum but this machine only has DC TIG. MIG with spool gun is the available option.",
+        "not_available": "AC TIG (machine is DC only)"
+      },
+      "chrome_moly": {
+        "recommended_processes": ["TIG"],
+        "requirements": "DC TIG with 100% Argon",
+        "note": "Requires high skill level"
+      },
+      "castings": {
+        "recommended_processes": ["Stick"],
+        "note": "Stick welding with appropriate electrode type"
+      }
+    },
+
+    "by_thickness": {
+      "very_thin": {
+        "range": "22-24 Gauge",
+        "best_process": "MIG or TIG",
+        "reason": "Better heat control, less burn-through risk",
+        "tips": "Use lower amperage, faster travel speed, longer CTWD"
+      },
+      "thin": {
+        "range": "18-20 Gauge",
+        "best_process": "MIG, Flux-Cored, or TIG",
+        "reason": "All wire processes work, TIG gives cleanest result"
+      },
+      "medium": {
+        "range": "16 Gauge - 3/16\"",
+        "best_process": "Any process works well",
+        "reason": "Sweet spot for all four processes"
+      },
+      "thick": {
+        "range": "1/4\" - 3/8\"",
+        "best_process": "Stick or MIG (on 240V)",
+        "reason": "Need higher amperage and deeper penetration",
+        "tips": "Bevel thick workpieces, allow slight gap, weld in several passes"
+      },
+      "very_thick": {
+        "range": "3/8\" - 1/2\"",
+        "best_process": "Stick (on 240V)",
+        "reason": "Deepest penetration capability",
+        "tips": "Multiple passes required. Bevel edges."
+      }
+    },
+
+    "quick_decision_tree": [
+      {
+        "question": "Are you working outdoors or in windy conditions?",
+        "if_yes": "Use Flux-Cored (no gas, wind-tolerant) or Stick",
+        "if_no": "Continue to next question"
+      },
+      {
+        "question": "What material are you welding?",
+        "if_aluminum": "MIG with optional Spool Gun + 100% Argon",
+        "if_chrome_moly": "TIG with 100% Argon",
+        "if_steel_or_stainless": "Continue to next question"
+      },
+      {
+        "question": "How thick is the material?",
+        "if_thin_22ga_to_3_8": "MIG (cleanest, easiest) or TIG (highest quality)",
+        "if_thick_1_4_to_1_2": "Stick (deepest penetration) or MIG on 240V"
+      },
+      {
+        "question": "How clean do you need the weld?",
+        "if_very_clean": "MIG (no slag) or TIG (cleanest possible)",
+        "if_doesnt_matter": "Flux-Cored (fastest setup, most forgiving)"
+      },
+      {
+        "question": "What's your skill level?",
+        "if_beginner": "MIG (easiest to learn) or Flux-Cored (simplest setup, no gas)",
+        "if_intermediate": "MIG or Stick",
+        "if_advanced": "TIG for precision, any process for general work"
+      }
+    ]
+  }
+}

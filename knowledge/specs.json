@@ -1,0 +1,156 @@
+{
+  "product": {
+    "name": "Vulcan OmniPro 220",
+    "model": "57812",
+    "manufacturer": "Harbor Freight Tools",
+    "type": "Multiprocess Welding System",
+    "processes": ["MIG", "Flux-Cored", "TIG", "Stick"],
+    "input_voltages": ["120 VAC / 60 Hz", "240 VAC / 60 Hz"],
+    "max_ocv": "86 VDC",
+    "wire_speed_range": "50 - 500 IPM",
+    "wire_spool_capacity": "Up to 12 lb spool",
+    "support_phone": "1-800-444-3353",
+    "support_email": "productsupport@harborfreight.com",
+    "warranty": "Limited 90 Day Warranty"
+  },
+
+  "specifications": {
+    "MIG": {
+      "120V": {
+        "current_input_at_output": "20.8A at 100A",
+        "welding_current_range": "30 - 140A",
+        "duty_cycles": [
+          { "percent": 40, "amperage": 100, "weld_minutes": 4, "rest_minutes": 6 },
+          { "percent": 60, "amperage": 85 },
+          { "percent": 100, "amperage": 75, "weld_minutes": 10, "rest_minutes": 0 }
+        ],
+        "max_ocv": "86 VDC"
+      },
+      "240V": {
+        "current_input_at_output": "25.5A at 200A",
+        "welding_current_range": "30 - 220A",
+        "duty_cycles": [
+          { "percent": 25, "amperage": 200, "weld_minutes": 2.5, "rest_minutes": 7.5 },
+          { "percent": 60, "amperage": 130 },
+          { "percent": 100, "amperage": 115, "weld_minutes": 10, "rest_minutes": 0 }
+        ],
+        "max_ocv": "86 VDC"
+      },
+      "weldable_materials": ["Mild Steel", "Stainless Steel", "Aluminum (with optional Spool Gun)"],
+      "wire_capacity": {
+        "solid_core": ["0.025\"", "0.030\"", "0.035\""],
+        "flux_cored": ["0.030\"", "0.035\"", "0.045\""]
+      },
+      "polarity": "DCEP (Direct Current Electrode Positive)",
+      "polarity_setup": {
+        "ground_clamp": "Negative (-) Socket",
+        "wire_feed_power": "Positive (+) Socket"
+      },
+      "shielding_gas": "Required - C25 (75% Argon / 25% CO2) for steel, Stainless Tri-Mix for stainless, 100% Argon for aluminum",
+      "gas_flow_rate": "20-30 SCFH"
+    },
+
+    "Flux-Cored": {
+      "120V": {
+        "welding_current_range": "30 - 140A",
+        "duty_cycles": [
+          { "percent": 40, "amperage": 100, "weld_minutes": 4, "rest_minutes": 6 },
+          { "percent": 60, "amperage": 85 },
+          { "percent": 100, "amperage": 75, "weld_minutes": 10, "rest_minutes": 0 }
+        ]
+      },
+      "240V": {
+        "welding_current_range": "30 - 220A",
+        "duty_cycles": [
+          { "percent": 25, "amperage": 200, "weld_minutes": 2.5, "rest_minutes": 7.5 },
+          { "percent": 60, "amperage": 130 },
+          { "percent": 100, "amperage": 115, "weld_minutes": 10, "rest_minutes": 0 }
+        ]
+      },
+      "weldable_materials": ["Mild Steel", "Stainless Steel"],
+      "polarity": "DCEN (Direct Current Electrode Negative)",
+      "polarity_setup": {
+        "ground_clamp": "Positive (+) Socket",
+        "wire_feed_power": "Negative (-) Socket"
+      },
+      "shielding_gas": "None required (self-shielded)",
+      "gas_flow_rate": null,
+      "notes": "Ideal for outdoor or windy conditions. Forgiving on rusty or dirty steels."
+    },
+
+    "TIG": {
+      "120V": {
+        "current_input_at_output": "20.6A at 125A",
+        "welding_current_range": "10 - 125A",
+        "duty_cycles": [
+          { "percent": 40, "amperage": 125, "weld_minutes": 4, "rest_minutes": 6 },
+          { "percent": 60, "amperage": 105 },
+          { "percent": 100, "amperage": 90, "weld_minutes": 10, "rest_minutes": 0 }
+        ],
+        "max_ocv": "86 VDC"
+      },
+      "240V": {
+        "current_input_at_output": "15.6A at 175A",
+        "welding_current_range": "10 - 175A",
+        "duty_cycles": [
+          { "percent": 30, "amperage": 175, "weld_minutes": 3, "rest_minutes": 7 },
+          { "percent": 60, "amperage": 125 },
+          { "percent": 100, "amperage": 105, "weld_minutes": 10, "rest_minutes": 0 }
+        ],
+        "max_ocv": "86 VDC"
+      },
+      "weldable_materials": ["Mild Steel", "Stainless Steel", "Chrome Moly"],
+      "polarity": "DCEN (Direct Current Electrode Negative)",
+      "polarity_setup": {
+        "ground_clamp": "Positive (+) Socket",
+        "tig_torch": "Negative (-) Socket"
+      },
+      "shielding_gas": "100% Argon",
+      "gas_flow_rate": "10-25 SCFH",
+      "arc_start": "Lift-style TIG (touch tungsten to workpiece, then lift)",
+      "foot_pedal": "Optional - provides amperage control during welding",
+      "electrode_protrusion": "1/8\" to 1/4\" beyond Ceramic Nozzle",
+      "electrode_tip_shape": "Conical portion 2.5x as long as electrode diameter",
+      "notes": "TIG welding is a complicated process requiring experience and skill. Training beyond the scope of the manual is required."
+    },
+
+    "Stick": {
+      "120V": {
+        "current_input_at_output": "19.5A at 80A",
+        "welding_current_range": "10 - 80A",
+        "duty_cycles": [
+          { "percent": 40, "amperage": 80, "weld_minutes": 4, "rest_minutes": 6 },
+          { "percent": 60, "amperage": 70 },
+          { "percent": 100, "amperage": 60, "weld_minutes": 10, "rest_minutes": 0 }
+        ],
+        "max_ocv": "86 VDC"
+      },
+      "240V": {
+        "current_input_at_output": "23.7A at 175A",
+        "welding_current_range": "10 - 175A",
+        "duty_cycles": [
+          { "percent": 25, "amperage": 175, "weld_minutes": 2.5, "rest_minutes": 7.5 },
+          { "percent": 60, "amperage": 115 },
+          { "percent": 100, "amperage": 100, "weld_minutes": 10, "rest_minutes": 0 }
+        ],
+        "max_ocv": "86 VDC"
+      },
+      "weldable_materials": ["Mild Steel", "Stainless Steel"],
+      "polarity": "DCEP (Direct Current Electrode Positive)",
+      "polarity_setup": {
+        "ground_clamp": "Negative (-) Socket",
+        "electrode_holder": "Positive (+) Socket"
+      },
+      "shielding_gas": "None required",
+      "electrode_types": ["60xx series", "70xx series"],
+      "notes": "Fastest setup (~30 seconds). No gas required. Ideal for outdoor or windy conditions."
+    }
+  },
+
+  "duty_cycle_explanation": {
+    "definition": "The Duty Cycle defines the number of minutes, within a 10 minute period, during which a given welder can produce a particular welding current without overheating.",
+    "example": "A welder with a 40% duty cycle at 100A must rest for at least 6 minutes after every 4 minutes of continuous welding.",
+    "thermal_protection": "The Welder has an internal thermal protection system. When overheated, it automatically shuts down and a warning screen appears. It automatically returns to service after cooling off.",
+    "cooling_tip": "Allow the Welder to cool with the Power Switch ON so the internal Fan helps cool the Welder."
+  }
+}

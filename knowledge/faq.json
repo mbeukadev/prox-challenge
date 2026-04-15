@@ -1,0 +1,140 @@
+{
+  "faq": {
+    "description": "Common first-time user questions mapped to the correct knowledge module and tool call. Designed for the persona: someone who just bought this welder and is standing in their garage.",
+
+    "questions": [
+      {
+        "category": "Getting Started",
+        "question": "What's the easiest welding process to learn on this machine?",
+        "answer_summary": "MIG is the easiest to learn. Flux-Cored is the easiest to SET UP (no gas needed). For a complete beginner, start with Flux-Cored to avoid gas setup complexity, then move to MIG.",
+        "tool_calls": ["get_procedure(process='Flux-Cored', section='cable_setup')", "lookup_specs(process='Flux-Cored')"],
+        "show_artifact": "process_selection_guide"
+      },
+      {
+        "category": "Getting Started",
+        "question": "Do I need gas for this welder?",
+        "answer_summary": "Depends on the process. Flux-Cored and Stick = NO gas needed. MIG = YES (C25 or CO2 for steel). TIG = YES (100% Argon). If you don't have gas, start with Flux-Cored.",
+        "tool_calls": ["lookup_specs(query_type='gas')"]
+      },
+      {
+        "category": "Getting Started",
+        "question": "Which wire do I use for regular steel?",
+        "answer_summary": "For MIG: 0.030\" or 0.035\" solid core wire with C25 gas. For Flux-Cored: 0.030\" or 0.035\" flux-cored wire, no gas. The machine comes with flux-cored wire.",
+        "tool_calls": ["lookup_specs(process='MIG', query_type='wire_sizes')", "lookup_specs(process='Flux-Cored', query_type='wire_sizes')"]
+      },
+      {
+        "category": "Getting Started",
+        "question": "Can I weld aluminum with this?",
+        "answer_summary": "Yes, but only with MIG using an optional Spool Gun (sold separately) and 100% Argon gas. You CANNOT TIG weld aluminum on this machine because it only has DC TIG, not AC TIG.",
+        "tool_calls": ["lookup_specs(process='MIG', query_type='materials')"]
+      },
+      {
+        "category": "Getting Started",
+        "question": "Can I use this on a regular 120V outlet?",
+        "answer_summary": "Yes. The machine works on both 120V and 240V. On 120V you get lower max amperage (140A MIG, 125A TIG, 80A Stick) and lower duty cycles. For thicker materials, 240V is recommended. The circuit needs a 20 amp rated GFCI-protected outlet with delayed action breaker.",
+        "tool_calls": ["lookup_specs(query_type='amperage_range')"]
+      },
+      {
+        "category": "Setup",
+        "question": "How do I set up the wire spool?",
+        "answer_summary": "Open door, remove wingnut and spacer, place spool over spindle (MUST unwind clockwise), replace spacer and tighten wingnut. Spool should NOT spin freely.",
+        "tool_calls": ["get_procedure(section='wire_setup')"],
+        "show_image": "page-10-wire-spool-setup.png"
+      },
+      {
+        "category": "Setup",
+        "question": "Which feed roller do I use?",
+        "answer_summary": "V-Groove (smooth) for solid core wire. Knurled Groove for flux-cored wire. Flip the roller to match your wire size. The size numbers are printed on each side of the roller.",
+        "tool_calls": ["get_procedure(section='wire_setup')"],
+        "show_image": "page-12-feed-roller.png",
+        "show_artifact": "feed_roller_diagram"
+      },
+      {
+        "category": "Setup",
+        "question": "Where does each cable go?",
+        "answer_summary": "It depends on the process — this is critical. MIG: ground=negative, wire=positive. Flux-Cored: ground=POSITIVE, wire=NEGATIVE (reversed!). TIG: ground=positive, torch=negative. Stick: ground=negative, electrode=positive.",
+        "tool_calls": ["get_procedure(section='cable_setup')"],
+        "show_artifact": "polarity_configurator",
+        "show_image": "quick-start-page-2.png"
+      },
+      {
+        "category": "Setup",
+        "question": "How do I set up TIG on this machine?",
+        "answer_summary": "Ground clamp to positive socket, TIG torch to negative socket, connect foot pedal inside machine, connect 100% Argon gas. This machine uses lift-start TIG (touch and lift) — no high-frequency start.",
+        "tool_calls": ["get_procedure(process='TIG', section='cable_setup')"],
+        "show_image": "page-24-tig-setup-cables.png",
+        "safety_warning": "process_specific.TIG.argon_asphyxiation"
+      },
+      {
+        "category": "During Welding",
+        "question": "What settings should I use for [material] at [thickness]?",
+        "answer_summary": "Use the synergetic presets: select your process, set wire/electrode diameter and material thickness on the LCD, and the machine auto-calculates wire feed speed and voltage. The white mark shows the recommended setting.",
+        "tool_calls": ["get_procedure(section='settings')"],
+        "show_artifact": "settings_recommender"
+      },
+      {
+        "category": "During Welding",
+        "question": "How long can I weld continuously?",
+        "answer_summary": "Depends on process, voltage, and amperage. Example: MIG at 200A on 240V = 25% duty cycle = 2.5 min welding, 7.5 min rest per 10-minute period. At lower amperage you can weld longer — 100% continuous at 115A on 240V.",
+        "tool_calls": ["lookup_specs(query_type='duty_cycle')"],
+        "show_artifact": "duty_cycle_calculator"
+      },
+      {
+        "category": "During Welding",
+        "question": "What angle should I hold the gun at?",
+        "answer_summary": "MIG (solid wire + gas): Push angle, 0-15° AWAY from weld direction. Flux-Cored (gasless): Drag angle, 0-15° TOWARD weld direction. Both: 90° for butt welds, 45° for fillet welds. CTWD 1/2\" or less.",
+        "show_image": "page-22-welding-angles-technique.png",
+        "show_artifact": "welding_angle_diagram"
+      },
+      {
+        "category": "Troubleshooting",
+        "question": "My welds look bad / what's wrong with my weld?",
+        "answer_summary": "Compare your weld to the diagnosis charts in the manual. Common issues: voltage too low (tall narrow bead), too high (flat wide bead), travel too fast (thin stringy), travel too slow (built up), wrong polarity (irregular with spatter).",
+        "tool_calls": ["troubleshoot(symptom='weld_appearance')"],
+        "show_image": "page-35-weld-diagnosis-wire.png",
+        "show_artifact": "weld_diagnosis_visual"
+      },
+      {
+        "category": "Troubleshooting",
+        "question": "I'm getting porosity / holes in my welds",
+        "answer_summary": "Check: 1) Polarity correct? (DCEP for MIG, DCEN for Flux-Cored) 2) Gas flow adequate? (MIG: 20-30 SCFH) 3) Workpiece clean? (must be bare metal) 4) CTWD too long? (keep under 1/2\") 5) Wire clean?",
+        "tool_calls": ["troubleshoot(symptom='porosity')"],
+        "show_image": "page-37-wire-porosity-spatter.png"
+      },
+      {
+        "category": "Troubleshooting",
+        "question": "The wire won't feed / wire is jamming",
+        "answer_summary": "Check: 1) Feed roller correct type and size? 2) Tension correct? (3-5 solid, 2-3 flux-cored) 3) Gun cable straight? 4) Liner clean? 5) Gun Cable Connector fully inserted? 6) Wire spool unwinding clockwise?",
+        "tool_calls": ["troubleshoot(symptom='wire_feed')"],
+        "show_artifact": "wire_feed_troubleshooter"
+      },
+      {
+        "category": "Troubleshooting",
+        "question": "The machine shut down / warning screen appeared",
+        "answer_summary": "The thermal protection tripped. This means you exceeded the duty cycle. Keep Power Switch ON so the fan cools the machine. It will automatically restart when cooled. Use shorter welding periods going forward.",
+        "tool_calls": ["troubleshoot(symptom='shutdown')", "lookup_specs(query_type='duty_cycle')"],
+        "show_artifact": "duty_cycle_calculator"
+      },
+      {
+        "category": "Troubleshooting",
+        "question": "I'm burning through the metal",
+        "answer_summary": "Material too thin for your settings. Reduce wire feed speed / current. Increase travel speed. Use longer CTWD. Consider switching to MIG or TIG for better control on thin material.",
+        "tool_calls": ["troubleshoot(symptom='burn_through')"]
+      },
+      {
+        "category": "Maintenance",
+        "question": "How do I maintain this welder?",
+        "answer_summary": "Before each use: inspect for loose hardware, damaged cord/cables, cracked parts. Periodically: use compressed air to blow out interior dust. After every use: store clean and dry. Before each weld: clean and inspect MIG Gun Contact Tip and Nozzle.",
+        "tool_calls": [],
+        "show_image": "page-41-maintenance.png"
+      },
+      {
+        "category": "Parts",
+        "question": "What contact tip / nozzle / part do I need?",
+        "answer_summary": "Contact Tip must match wire size (0.025\", 0.030\", 0.035\", or 0.045\"). Check that the hole at the end is an even circle, not oblong. Specify UPC 193175422590 when ordering replacement parts from Harbor Freight.",
+        "tool_calls": [],
+        "show_image": "page-46-parts-list.png"
+      }
+    ]
+  }
+}

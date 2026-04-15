@@ -1,0 +1,307 @@
+{
+  "troubleshooting": {
+    "wire_welding": {
+      "applies_to": ["MIG", "Flux-Cored"],
+      "manual_pages": [42, 43],
+      "problems": [
+        {
+          "symptom": "Wire Feed Motor Runs but Wire Does Not Feed Properly",
+          "causes_and_solutions": [
+            { "cause": "Insufficient wire feed pressure", "solution": "Increase wire feed pressure. Follow tension test: feed wire against wood block at 2-3 inches, wire should bend." },
+            { "cause": "Incorrect wire feed roller size", "solution": "Flip roller to correct size. V-Groove for solid core, Knurled for flux-cored." },
+            { "cause": "Damaged MIG Gun, cable, or liner assembly", "solution": "Have qualified technician inspect and replace as necessary." },
+            { "cause": "Feed Tensioner too tight", "solution": "Loosen Feed Tensioner so it only applies enough pressure to prevent spinning after trigger release." }
+          ]
+        },
+        {
+          "symptom": "Wire Creates a Bird's Nest During Operation",
+          "causes_and_solutions": [
+            { "cause": "Excess wire feed pressure", "solution": "Adjust wire feed pressure properly. Tension should be 3-5 for solid, 2-3 for flux-cored." },
+            { "cause": "Incorrect Contact Tip size", "solution": "Replace with proper tip for wire used." },
+            { "cause": "MIG Gun Cable Connector not fully inserted into Wire Feed mechanism", "solution": "Insert Gun Cable Connector fully — no O-Rings should be exposed." },
+            { "cause": "Damaged liner", "solution": "Have qualified technician inspect and repair/replace." }
+          ]
+        },
+        {
+          "symptom": "Wire Stops During Welding",
+          "causes_and_solutions": [
+            { "cause": "Gun cable severely bent", "solution": "Straighten Gun cable." },
+            { "cause": "Gun liner clogged or worn", "solution": "Check gun liner for obstruction, replace if necessary." },
+            { "cause": "Gun liner too small for wire", "solution": "Check that gun liner is correct size for wire." },
+            { "cause": "Wire tangled on spool", "solution": "Check wire for cross winding or tangled spool." },
+            { "cause": "Wire not in Feed Roller groove", "solution": "Ensure correct groove for wire diameter is being used." },
+            { "cause": "Feed Roller not making enough contact / crushing flux-cored wire", "solution": "Check Feed Tensioner and ensure proper setting (2-3 for flux-cored)." }
+          ]
+        },
+        {
+          "symptom": "Welding Arc Not Stable",
+          "causes_and_solutions": [
+            { "cause": "Wire not feeding properly", "solution": "See wire feed troubleshooting above." },
+            { "cause": "Incorrect Contact Tip or liner size / excessive wear", "solution": "Replace with proper tip or liner size." },
+            { "cause": "Incorrect wire feed speed", "solution": "Adjust wire feed speed to achieve more stable arc." },
+            { "cause": "Loose MIG Gun cable or ground cable", "solution": "Check all connections are tight." },
+            { "cause": "Damaged MIG Gun or loose internal connection", "solution": "Have technician inspect and repair." },
+            { "cause": "Incorrect polarity", "solution": "DCEP for MIG, DCEN for Flux-Cored self-shielded." },
+            { "cause": "Gas coverage insufficient or too high (MIG only)", "solution": "Set gas flow to 20-30 SCFH. Ensure Cable Connector is fully inserted." },
+            { "cause": "Poor connection with workpiece", "solution": "Check ground clamp connection. Ensure MIG Gun is properly secured." }
+          ]
+        },
+        {
+          "symptom": "Weak Arc Strength",
+          "causes_and_solutions": [
+            { "cause": "Incorrect line voltage", "solution": "Check line voltage, have electrician remedy if insufficient." },
+            { "cause": "Improper cord gauge or length", "solution": "Do NOT use extension cord. Use only supplied power cords." },
+            { "cause": "Not enough current", "solution": "Switch current to proper setting for metal thickness." }
+          ]
+        },
+        {
+          "symptom": "Wire Feeds but Arc Does Not Ignite",
+          "causes_and_solutions": [
+            { "cause": "Improper ground connection", "solution": "Ensure workpiece is properly contacted by Ground Clamp, cleaned near clamp and weld location." },
+            { "cause": "Improperly sized Contact Tip", "solution": "Verify Contact Tip matches wire size." },
+            { "cause": "Excessively worn Contact Tip", "solution": "Check hole is not deformed or enlarged, replace if needed." },
+            { "cause": "Dirty Contact Tip", "solution": "Clean Contact Tip properly." }
+          ]
+        },
+        {
+          "symptom": "Welder Does Not Function When Switched On",
+          "causes_and_solutions": [
+            { "cause": "Tripped thermal protection", "solution": "Wait with Power Switch ON for cooling. Warning screen shows in LCD. Reduce welding duration." },
+            { "cause": "Insufficient input voltage or amperage", "solution": "Verify circuit supplies required specs. Check for low/high voltage warning on LCD." },
+            { "cause": "Faulty or improperly connected Trigger", "solution": "Ensure gun connection is properly seated. Technician must check Trigger." },
+            { "cause": "Low or over-voltage protection active", "solution": "Check input voltage is within range. Press Reset Button on back of machine." },
+            { "cause": "Incorrect mode selected", "solution": "Ensure correct process has been selected on LCD." }
+          ]
+        },
+        {
+          "symptom": "LCD Display Does Not Light When Switched On",
+          "causes_and_solutions": [
+            { "cause": "Not connected to outlet properly", "solution": "Verify voltage at outlet and connection." },
+            { "cause": "Outlet is unpowered", "solution": "Check circuit breaker/GFCI devices." },
+            { "cause": "Incorrect plug rating", "solution": "Make sure installed plug is correct rating per Specifications." },
+            { "cause": "Circuit breaker tripped due to high input amperage", "solution": "Press Reset Button on back of machine." },
+            { "cause": "Input Power Cord not seated properly", "solution": "Ensure twist lock input Power Cord is fully secured." }
+          ]
+        },
+        {
+          "symptom": "Porosity in Weld Metal",
+          "causes_and_solutions": [
+            { "cause": "Empty shielding gas bottle (MIG)", "solution": "Check gas bottle and replenish." },
+            { "cause": "Incorrect gas flow (MIG)", "solution": "Check gas regulator for proper flow (20-30 SCFH)." },
+            { "cause": "Dirty workpiece", "solution": "Clean workpiece down to bare metal." },
+            { "cause": "Gun too far from workpiece", "solution": "Check CTWD — maintain 1/2\" or less." },
+            { "cause": "Incorrect polarity", "solution": "DCEP for MIG, DCEN for Flux-Cored." },
+            { "cause": "Dirty welding wire", "solution": "Ensure wire is clean, free of rust and residues." }
+          ]
+        }
+      ]
+    },
+
+    "tig_stick_welding": {
+      "applies_to": ["TIG", "Stick"],
+      "manual_pages": [44],
+      "problems": [
+        {
+          "symptom": "Welder Does Not Function When Switched On",
+          "causes_and_solutions": [
+            { "cause": "Tripped thermal protection", "solution": "Reduce duration/frequency of welding. Follow duty cycle guidelines." },
+            { "cause": "Faulty or improperly connected Trigger", "solution": "Qualified technician must check and secure/replace Trigger." },
+            { "cause": "Ground Clamp not attached", "solution": "Attach Ground Clamp to workpiece." },
+            { "cause": "Shielding Gas not connected (TIG)", "solution": "Connect shielding gas to Welder." }
+          ]
+        },
+        {
+          "symptom": "LCD Display Does Not Light When Switched On",
+          "causes_and_solutions": [
+            { "cause": "Not connected to outlet properly", "solution": "Verify voltage at outlet and connection." },
+            { "cause": "Outlet unpowered", "solution": "Check circuit breaker/GFCI devices. Verify circuit supplies required input amperage." }
+          ]
+        },
+        {
+          "symptom": "Weak Arc Strength",
+          "causes_and_solutions": [
+            { "cause": "Incorrect line voltage", "solution": "Check line voltage, have electrician remedy." },
+            { "cause": "Improper cord", "solution": "Do NOT use extension cord. Use only supplied power cords." }
+          ]
+        },
+        {
+          "symptom": "Welding Arc Not Stable",
+          "causes_and_solutions": [
+            { "cause": "Loose electrode or ground cable", "solution": "Check all connections are tight." },
+            { "cause": "Damaged electrode holder / loose connection", "solution": "Have technician inspect and repair." },
+            { "cause": "Incorrect current setting", "solution": "Match setting to recommended chart value." },
+            { "cause": "Shielding gas getting low (TIG)", "solution": "Replace shielding gas cylinder." }
+          ]
+        }
+      ]
+    }
+  },
+
+  "weld_diagnosis": {
+    "wire_welding": {
+      "applies_to": ["MIG", "Flux-Cored"],
+      "manual_pages": [35, 36, 37],
+      "heat_control": {
+        "too_cold": {
+          "appearance": "Weld does not penetrate the joint fully, just on the surface",
+          "fixes": ["Increase weld current", "Decrease travel speed", "Use faster wire feed", "Use shorter CTWD"]
+        },
+        "proper": {
+          "appearance": "Weld is visible underneath and bulges slightly on top"
+        },
+        "too_hot": {
+          "appearance": "Weld droops on top and underneath, or falls through entirely making a hole",
+          "fixes": ["Decrease weld current", "Increase travel speed", "Use slower wire feed", "Use longer CTWD"]
+        }
+      },
+      "bead_problems": [
+        {
+          "problem": "Voltage Too Low / Wire Feed Too Slow",
+          "appearance": "Tall, narrow, ropey bead with poor fusion",
+          "fix": "Increase Output Voltage OR Increase Wire Feed Speed"
+        },
+        {
+          "problem": "Voltage Too High / Wire Feed Too Fast",
+          "appearance": "Wide, flat bead with excessive spatter",
+          "fix": "Decrease Output Voltage OR Decrease Wire Feed Speed"
+        },
+        {
+          "problem": "Travel Speed Too Fast",
+          "appearance": "Thin, stringy bead with poor penetration",
+          "fix": "Travel slower"
+        },
+        {
+          "problem": "Travel Speed Too Slow",
+          "appearance": "Wide, built-up bead with excess material",
+          "fix": "Travel faster"
+        },
+        {
+          "problem": "CTWD Too Long / Wrong Polarity",
+          "appearance": "Irregular bead with excessive spatter and poor fusion",
+          "fix": "Check polarity (DCEP for MIG, DCEN for Flux-Cored) AND maintain less than 1/2\" CTWD"
+        },
+        {
+          "problem": "Porosity",
+          "appearance": "Small cavities or holes in the bead",
+          "causes": ["Incorrect polarity", "Insufficient shielding gas (MIG)", "Incorrect shielding gas (MIG)", "Dirty workpiece or wire", "Inconsistent travel speed", "CTWD too long"]
+        },
+        {
+          "problem": "Excessive Spatter",
+          "appearance": "Grainy and large spatter around weld (fine spatter is normal)",
+          "causes": ["Dirty workpiece or wire", "Incorrect polarity", "Insufficient shielding gas (MIG)", "Wire feeding too fast", "CTWD too long"]
+        },
+        {
+          "problem": "Burn-Through",
+          "appearance": "Base material melts away leaving a hole",
+          "causes": ["Workpiece overheating", "Travel speed too slow", "Excessive material at weld"]
+        },
+        {
+          "problem": "Crooked/Wavy Bead",
+          "causes": ["Inaccurate welding (use two hands)", "Inconsistent travel speed", "CTWD too long"]
+        },
+        {
+          "problem": "Weld Not Adhering Properly",
+          "appearance": "Gaps between weld and workpiece or previous bead",
+          "causes": ["Incorrect technique", "Insufficient heat", "Dirty workpiece", "Insufficient wire feed", "Workpiece gap too narrow"]
+        },
+        {
+          "problem": "Bend at Joint",
+          "causes": ["Improper clamping", "Excessive heat"]
+        }
+      ]
+    },
+
+    "stick_welding": {
+      "applies_to": ["Stick"],
+      "manual_pages": [38, 39, 40],
+      "heat_control": {
+        "too_cold": {
+          "appearance": "Weld does not contact the joint fully, just on the surface",
+          "fixes": ["Increase current", "Weld more slowly"]
+        },
+        "proper": {
+          "appearance": "Weld is visible underneath and bulges slightly on top"
+        },
+        "too_hot": {
+          "appearance": "Weld droops on top and underneath or falls through entirely, making a hole",
+          "fixes": ["Decrease current", "Weld more quickly"]
+        }
+      },
+      "bead_problems": [
+        {
+          "problem": "Current Too Low",
+          "fix": "Increase the current"
+        },
+        {
+          "problem": "Current Too High",
+          "fix": "Decrease the current"
+        },
+        {
+          "problem": "Weld Speed Too Fast",
+          "fix": "Weld slower"
+        },
+        {
+          "problem": "Weld Speed Too Slow",
+          "fix": "Weld faster"
+        },
+        {
+          "problem": "Arc Length Too Short",
+          "fix": "Increase distance"
+        },
+        {
+          "problem": "Arc Length Too Long",
+          "fix": "Decrease distance"
+        },
+        {
+          "problem": "Porosity",
+          "appearance": "Small cavities or holes in bead",
+          "causes": ["Dirty workpiece or fill material", "Inconsistent welding speed"]
+        },
+        {
+          "problem": "Excessive Spatter",
+          "causes": ["Dirty workpiece or fill material"]
+        },
+        {
+          "problem": "Burn-Through",
+          "causes": ["Workpiece overheating (reduce current)", "Welding speed too slow", "Excessive fill material"]
+        }
+      ]
+    }
+  },
+
+  "video_observations": {
+    "source": "YouTube demo video - Vulcan OmniPro 220",
+    "url": "https://www.youtube.com/watch?v=kxGDoGcnhBw",
+    "findings": [
+      {
+        "process": "Flux-Cored",
+        "setup_time": "4.5 minutes (new spool, leads disconnected)",
+        "wire": "0.035\" Vulcan flux-core",
+        "settings_tested": "12ga and 10ga — slower at 12, faster at 10",
+        "result": "Both produced good welds. Synergetic presets worked well."
+      },
+      {
+        "process": "MIG",
+        "setup_time": "5.5 minutes (+1 min vs flux-core)",
+        "extra_step": "Change roller from knurled to V-groove, add 100% CO2 shielding",
+        "wire": "0.035\" solid-core Vulcan",
+        "result": "Synergetic settings spot on. 'Two for two.'"
+      },
+      {
+        "process": "TIG",
+        "setup_time": "~8 minutes (longest — tungsten grind, gas hookup)",
+        "arc_start": "Lift-style TIG available. Foot pedal provides amperage control.",
+        "suggestion": "Add high-frequency start for quicker ignition",
+        "result": "Functional but lift-start is slower than HF start"
+      },
+      {
+        "process": "Stick",
+        "setup_time": "~30 seconds (fastest)",
+        "electrode": "7018, 1/8\" rod on 3/16\" plate",
+        "notes": "Machine prompts for 60xx or 70xx series. 6010 compatibility unclear.",
+        "result": "Good weld on plate and fillet on 1/8\" coupons"
+      }
+    ],
+    "overall_assessment": "Synergetic presets work well for all processes. Machine sits mid-range in feature set. Versatile and functional across all four processes."
+  }
+}

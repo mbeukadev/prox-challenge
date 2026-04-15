@@ -1,0 +1,167 @@
+{
+  "image_references": {
+    "product_images": [
+      {
+        "id": "product_front",
+        "file": "product.webp",
+        "description": "Front view of Vulcan OmniPro 220 showing LCD display, control knobs (Left, Main, Right), Home/Back buttons, power switch, positive and negative sockets at bottom, and MIG gun socket",
+        "relevant_for": ["front panel controls", "socket locations", "LCD display", "knob identification"]
+      },
+      {
+        "id": "product_inside",
+        "file": "product-inside.webp",
+        "description": "Inside panel view showing wire spool area, wire feed mechanism, feed tensioner, idler arm, cold wire feed switch, and the settings/reference chart on the inside of the door",
+        "relevant_for": ["wire spool setup", "feed roller", "wire threading", "feed tensioner adjustment", "settings chart", "duty cycle reference"]
+      }
+    ],
+
+    "manual_diagrams": {
+      "front_panel_controls": {
+        "manual_page": 8,
+        "elements": ["LCD Display", "Left Knob", "Main Control Knob", "Right Knob", "Home Button", "Back Button", "Power Switch", "Wire Feed Power Cable socket", "MIG Gun / Spool Gun Cable Socket", "Negative Socket", "Positive Socket", "Spool Gun Gas Outlet", "Storage Compartment"],
+        "generate_svg": true,
+        "description": "Labeled diagram of front panel showing all controls and socket positions"
+      },
+      "interior_controls": {
+        "manual_page": 9,
+        "elements": ["Cold Wire Feed Switch", "Idler Arm", "Wire Feed Mechanism", "Wire Spool", "Spool Knob", "Feed Tensioner", "Wire Inlet Liner", "Feed Roller Knob", "Wire Feed Control Socket", "Foot Pedal Socket"],
+        "generate_svg": true,
+        "description": "Labeled diagram of interior showing wire feed system components"
+      },
+      "polarity_dcen_flux": {
+        "manual_page": 13,
+        "description": "DCEN setup for Flux-Cored: Ground Clamp in Positive Socket, Wire Feed Power Cable in Negative Socket",
+        "process": "Flux-Cored",
+        "generate_svg": true
+      },
+      "polarity_dcep_mig": {
+        "manual_page": 14,
+        "description": "DCEP setup for MIG: Ground Clamp in Negative Socket, Wire Feed Power Cable in Positive Socket",
+        "process": "MIG",
+        "generate_svg": true
+      },
+      "polarity_tig": {
+        "manual_page": 24,
+        "description": "TIG setup: Ground Clamp in Positive Socket, TIG Torch in Negative Socket, Foot Pedal connected inside, Gas hose to regulator",
+        "process": "TIG",
+        "generate_svg": true
+      },
+      "polarity_stick": {
+        "manual_page": 27,
+        "description": "Stick setup: Ground Clamp in Negative Socket, Electrode Holder in Positive Socket",
+        "process": "Stick",
+        "generate_svg": true
+      },
+      "feed_roller_types": {
+        "manual_page": 12,
+        "description": "Feed roller showing V-Groove (solid core) with 0.025 and 0.030/0.035 grooves, and Knurled Groove (flux-cored) with 0.030/0.035 and 0.045 grooves",
+        "generate_svg": true
+      },
+      "wire_spool_loading_small": {
+        "manual_page": 10,
+        "description": "1-2 lb wire spool loading: Wingnut, Spacer, Spool Brake Pad, Spool Spindle"
+      },
+      "wire_spool_loading_large": {
+        "manual_page": 11,
+        "description": "10-12 lb wire spool loading: includes Spool Adapter between spindle and spool"
+      },
+      "gun_cable_connector": {
+        "manual_page": 13,
+        "description": "Correct vs incorrect Gun Cable Connector insertion into Wire Feed mechanism. Incorrect = not fully seated, will leak gas."
+      },
+      "welding_angles": {
+        "manual_page": 22,
+        "elements": ["Push angle (0-15° for MIG solid wire)", "Drag angle (0-15° for flux-cored)", "Butt weld joint (90°)", "Fillet weld joint (45°)", "CTWD up to 1/2\""],
+        "generate_svg": true,
+        "description": "MIG gun angles for different weld types and wire types"
+      },
+      "stringer_vs_weave": {
+        "manual_page": 22,
+        "description": "Stringer bead (straight line, narrow weld) vs Weave bead (back and forth, wider weld)"
+      },
+      "tig_torch_assembly": {
+        "manual_page": 26,
+        "elements": ["Back Cap", "Collet", "Collet Body", "Ceramic Nozzle", "Tungsten Electrode insertion point"],
+        "generate_svg": true,
+        "description": "Exploded view of TIG torch assembly showing all components"
+      },
+      "electrode_grinding": {
+        "manual_page": 26,
+        "description": "Tungsten electrode grinding technique: angle against grinding wheel, conical tip 2.5x electrode diameter, grinding direction parallel to length"
+      },
+      "duty_cycle_diagram_mig_120v": {
+        "manual_page": 19,
+        "description": "120VAC: 40% at 100A = 4 min welding, 6 min resting. 100% continuous at 75A."
+      },
+      "duty_cycle_diagram_mig_240v": {
+        "manual_page": 19,
+        "description": "240VAC: 25% at 200A = 2.5 min welding, 7.5 min resting. 100% continuous at 115A."
+      },
+      "duty_cycle_diagram_tig_stick": {
+        "manual_page": 29,
+        "description": "TIG 120V: 40% at 125A. TIG 240V: 30% at 175A. Stick 120V: 40% at 80A. Stick 240V: 25% at 175A."
+      },
+      "weld_diagnosis_wire": {
+        "manual_page": 35,
+        "description": "Visual comparison of wire weld beads: Good Weld, Voltage Too Low, Voltage Too High, Travel Speed Too Fast, Travel Speed Too Slow, CTWD Too Long/Wrong Polarity. Each with photo and correction."
+      },
+      "weld_diagnosis_stick": {
+        "manual_page": 38,
+        "description": "Visual comparison of stick weld beads: Good Weld, Current Too Low, Current Too High, Weld Speed Too Fast, Weld Speed Too Slow, Arc Length Too Short, Arc Length Too Long. Each with photo and correction."
+      },
+      "weld_penetration_profiles": {
+        "manual_pages": [35, 36, 38, 39],
+        "description": "Cross-section profile views showing inadequate penetration, proper penetration, and excess penetration/burn-through for both wire and stick welding"
+      },
+      "wiring_schematic": {
+        "manual_page": 45,
+        "description": "Full internal wiring schematic showing AC input, bridge rectifier, PFC, IGBT, transformer, MCU board, LCD screen, wire feeder, solenoid valve, fans, and all connector pinouts (CN1-CN8)",
+        "note": "Complex electrical diagram — best surfaced as the original manual page image rather than regenerated"
+      },
+      "settings_chart": {
+        "file": "selection-chart.pdf",
+        "description": "How to Choose a Welder chart: 6-step decision matrix comparing Flux-Cored, MIG, Stick, and TIG across skill level, shielding gas needs, material type, thickness, applications, and weld cleanliness",
+        "relevant_for": ["process selection", "which welding type to use", "beginner guidance"]
+      },
+      "quick_start_guide": {
+        "file": "quick-start-guide.pdf",
+        "pages": 2,
+        "page_1": "Front side: 6-step quick start for wire welding (spool loading, wire feeding, tension test, settings)",
+        "page_2": "Back side: Cable setup diagrams for Stick, MIG, Flux, and TIG — labeled numbered diagrams showing exactly which cable goes where"
+      }
+    }
+  },
+
+  "interactive_tools_to_generate": [
+    {
+      "tool": "duty_cycle_calculator",
+      "description": "User selects process (MIG/Flux/TIG/Stick), voltage (120V/240V), and amperage. Tool shows duty cycle percentage, welding time, and rest time in a visual 10-minute clock diagram.",
+      "data_source": "specs.json → specifications → [process] → [voltage] → duty_cycles"
+    },
+    {
+      "tool": "polarity_configurator",
+      "description": "User selects process. Tool shows an SVG diagram of the front panel with colored cables going into the correct sockets, plus gas requirements.",
+      "data_source": "procedures.json → polarity_summary → configurations"
+    },
+    {
+      "tool": "settings_recommender",
+      "description": "User inputs: process + material type + material thickness + wire/electrode size. Tool outputs recommended wire feed speed, voltage, gas type, gas flow, and polarity setup.",
+      "data_source": "Synthesized from specs.json + procedures.json + selection chart"
+    },
+    {
+      "tool": "troubleshooting_flowchart",
+      "description": "User describes symptom. Tool generates an interactive decision tree walking through possible causes and solutions.",
+      "data_source": "troubleshooting.json → troubleshooting → [process category] → problems"
+    },
+    {
+      "tool": "weld_diagnosis_visual",
+      "description": "User describes weld appearance or selects from visual examples. Tool identifies the problem and shows the correction with before/after comparison.",
+      "data_source": "troubleshooting.json → weld_diagnosis"
+    },
+    {
+      "tool": "process_selection_guide",
+      "description": "Interactive version of the selection chart. User answers questions about skill level, indoor/outdoor, material, thickness, and cleanliness needs. Tool recommends the best welding process.",
+      "data_source": "selection-chart.pdf content"
+    }
+  ]
+}

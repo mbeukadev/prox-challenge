@@ -1,0 +1,223 @@
+{
+  "menu_navigation": {
+    "description": "The OmniPro 220 uses an LCD display with three knobs (Left, Main/Control, Right) and two buttons (Home, Back). Navigation is sequential — you move through screens by pressing the Main Control Knob.",
+    "controls": {
+      "home_button": "Returns to process selection screen from anywhere",
+      "back_button": "Returns to previous screen",
+      "main_control_knob_turn": "Scrolls through options on current screen",
+      "main_control_knob_press": "Selects current option / advances to next screen",
+      "left_knob": "Adjusts left-side parameter (varies by screen)",
+      "right_knob": "Adjusts right-side parameter (varies by screen)"
+    },
+
+    "screen_flow": {
+      "MIG": [
+        {
+          "screen": 1,
+          "name": "Process Selection",
+          "display": "MIG Stainless Steel (or MIG Steel, etc.)",
+          "action": "Turn Main Knob to find MIG process, press to select",
+          "left_knob": null,
+          "right_knob": null
+        },
+        {
+          "screen": 2,
+          "name": "Polarity & Gas Confirmation",
+          "display": "Shows cable diagram (- and +) with gas type (e.g. Stainless Tri-Mix, C25)",
+          "action": "Plug cables per diagram. Connect gas. Set SCFH 20-30. Press Main Knob to confirm.",
+          "left_knob": null,
+          "right_knob": null
+        },
+        {
+          "screen": 3,
+          "name": "Wire Diameter & Material Thickness",
+          "display": "Diameter: .025\" | Thickness: 24Ga",
+          "action": "Press Main Knob to confirm and go to weld screen",
+          "left_knob": "Set wire diameter (.025\", .030\", .035\")",
+          "right_knob": "Set material thickness (gauge)"
+        },
+        {
+          "screen": 4,
+          "name": "Auto Weld Settings (Main Weld Screen)",
+          "display": "Top: Wire Feed Speed (in/min) and Voltage (V). Bottom: Process, Gas Type, wire diameter, material thickness. Run-In WFS, Inductance, Spot Timer shown.",
+          "action": "This is the welding screen. Press Main Knob to enter Optional Settings.",
+          "left_knob": "Adjust Wire Feed Speed (Amperage)",
+          "right_knob": "Adjust Voltage",
+          "note": "White mark on setting line shows recommended value for your wire/thickness combo"
+        },
+        {
+          "screen": "5a",
+          "name": "Optional: Run-In WFS",
+          "display": "Run-In WFS icon",
+          "action": "Turn Main Knob to adjust. This sets wire speed before contact (% of preset WFS).",
+          "parent": "Optional Settings submenu"
+        },
+        {
+          "screen": "5b",
+          "name": "Optional: Inductance",
+          "display": "Inductance icon (coil symbol)",
+          "action": "Turn Main Knob to adjust. Increase = more fluid puddle, flatter bead. Decrease = colder puddle.",
+          "parent": "Optional Settings submenu"
+        },
+        {
+          "screen": "5c",
+          "name": "Optional: Spot Timer",
+          "display": "Spot Timer icon (clock)",
+          "action": "Turn Main Knob to set timer for spot welding.",
+          "parent": "Optional Settings submenu"
+        },
+        {
+          "screen": "5d",
+          "name": "Optional: Recall Setting",
+          "display": "Recall Setting icon (up arrow)",
+          "action": "Retrieve previously saved settings from 5 available slots.",
+          "parent": "Optional Settings submenu"
+        },
+        {
+          "screen": "5e",
+          "name": "Optional: Save Setting",
+          "display": "Save Setting icon (down arrow)",
+          "action": "Turn Main Knob to scroll 5 slots. Press to access OVERWRITE MEMORY SETTING. Turn to YES, press to save.",
+          "parent": "Optional Settings submenu"
+        }
+      ],
+
+      "Flux-Cored": [
+        {
+          "screen": 1,
+          "name": "Process Selection",
+          "display": "Flux-Cored",
+          "action": "Turn Main Knob to find Flux-Cored process, press to select"
+        },
+        {
+          "screen": 2,
+          "name": "Polarity & Gas Confirmation",
+          "display": "Shows DCEN cable diagram — ground to +, wire feed to -. No gas required.",
+          "action": "Plug cables per diagram. Press Main Knob to confirm."
+        },
+        {
+          "screen": 3,
+          "name": "Wire Diameter & Material Thickness",
+          "display": "Same layout as MIG",
+          "left_knob": "Set wire diameter (.030\", .035\", .045\")",
+          "right_knob": "Set material thickness (gauge)"
+        },
+        {
+          "screen": 4,
+          "name": "Auto Weld Settings",
+          "display": "Same layout as MIG but no gas type shown",
+          "left_knob": "Adjust Wire Feed Speed (Amperage)",
+          "right_knob": "Adjust Voltage"
+        }
+      ],
+
+      "TIG": [
+        {
+          "screen": 1,
+          "name": "Process Selection",
+          "display": "TIG",
+          "action": "Turn Main Knob to find TIG process, press to select"
+        },
+        {
+          "screen": 2,
+          "name": "Polarity & Gas Confirmation",
+          "display": "Shows DCEN cable diagram — ground to +, TIG torch to -. 100% Argon.",
+          "action": "Plug cables per diagram. Connect 100% Argon. Set SCFH 10-25. Press to confirm."
+        },
+        {
+          "screen": 3,
+          "name": "Rod Diameter & Material Thickness",
+          "display": "Diameter: 1/16\" | Thickness: 24 Ga",
+          "left_knob": "Set rod (tungsten) diameter",
+          "right_knob": "Set material thickness (gauge)"
+        },
+        {
+          "screen": 4,
+          "name": "Auto Weld Settings",
+          "display": "Top-left: Amperage (e.g. 30 A). Top-right: ON/OFF toggle. Bottom: Process (TIG with Pedal), Gas (100% Ar), rod diameter, material thickness.",
+          "left_knob": "Adjust output amperage",
+          "right_knob": "Toggle ON/OFF — WARNING: turning ON energizes TIG Torch with Open Circuit Voltage",
+          "critical_warning": "When Right Knob is set to ON, the welder is energized and OCV is present on the torch"
+        },
+        {
+          "screen": "5a",
+          "name": "Optional: Recall Setting",
+          "parent": "Optional Settings submenu"
+        },
+        {
+          "screen": "5b",
+          "name": "Optional: Save Setting",
+          "parent": "Optional Settings submenu"
+        }
+      ],
+
+      "Stick": [
+        {
+          "screen": 1,
+          "name": "Process Selection",
+          "display": "Stick",
+          "action": "Turn Main Knob to find Stick process, press to select"
+        },
+        {
+          "screen": 2,
+          "name": "Electrode Type",
+          "display": "Stick — Electrode: 60xx (or 70xx)",
+          "action": "Turn Main Knob to select electrode type (60xx or 70xx). Press to confirm."
+        },
+        {
+          "screen": 3,
+          "name": "Polarity Confirmation",
+          "display": "Shows DCEP cable diagram — ground to -, electrode holder to +. No Gas Required.",
+          "action": "Plug cables per diagram. Press to confirm."
+        },
+        {
+          "screen": 4,
+          "name": "Electrode Diameter & Material Thickness",
+          "display": "Diameter: 3/32\" | Thickness: 16 Ga",
+          "left_knob": "Set electrode diameter",
+          "right_knob": "Set material thickness"
+        },
+        {
+          "screen": 5,
+          "name": "Auto Weld Settings",
+          "display": "Top-left: Amperage (e.g. 60 A). Top-right: ON/OFF toggle. Bottom: Process (Stick), Electrode Type (70XX), electrode diameter, material thickness, Hot Start, Arc Force.",
+          "left_knob": "Adjust output amperage",
+          "right_knob": "Toggle ON/OFF — WARNING: turning ON energizes Electrode Holder with OCV",
+          "critical_warning": "When Right Knob is set to ON, the welder is energized"
+        },
+        {
+          "screen": "6a",
+          "name": "Optional: Hot Start",
+          "display": "Hot Start icon (ramp curve)",
+          "action": "Adjust amperage boost at start of weld. Higher = easier arc ignition.",
+          "parent": "Optional Settings submenu"
+        },
+        {
+          "screen": "6b",
+          "name": "Optional: Arc Force",
+          "display": "Arc Force icon (dig curve)",
+          "action": "Adjust weld penetration and smoothness. Higher = more aggressive dig.",
+          "parent": "Optional Settings submenu"
+        },
+        {
+          "screen": "6c",
+          "name": "Optional: Recall Setting",
+          "parent": "Optional Settings submenu"
+        },
+        {
+          "screen": "6d",
+          "name": "Optional: Save Setting",
+          "parent": "Optional Settings submenu"
+        }
+      ]
+    },
+
+    "warning_screens": {
+      "thermal_shutdown": {
+        "display": "Warning triangle icon with table: Problem | Remedy. Lists: Duty Cycle Exceeded, Low Voltage Input, High Voltage Input.",
+        "behavior": "Machine shuts down automatically. Returns to service after cooling. Keep Power Switch ON for fan cooling.",
+        "manual_page": 23
+      }
+    }
+  }
+}

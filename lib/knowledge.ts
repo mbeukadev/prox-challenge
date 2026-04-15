@@ -1,0 +1,392 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+const specs: any        = require('../knowledge/specs.json')
+const procedures: any   = require('../knowledge/procedures.json')
+const troubleshootingData: any = require('../knowledge/troubleshooting.json')
+const imageRefs: any    = require('../knowledge/image-references.json')
+
+// ─────────────────────────────────────────────────────────────────────────────
+// lookup_specs
+// ─────────────────────────────────────────────────────────────────────────────
+
+export type Process        = 'MIG' | 'Flux-Cored' | 'TIG' | 'Stick'
+export type Voltage        = '120V' | '240V'
+export type SpecsQueryType = 'duty_cycle' | 'amperage_range' | 'wire_sizes' | 'polarity' | 'gas' | 'materials' | 'all'
+
+export function lookupSpecs(
+  process: Process,
+  voltage: Voltage,
+  queryType: SpecsQueryType,
+): Record<string, unknown> {
+  const allSpecs   = specs.specifications
+  const processSpec = allSpecs?.[process]
+  if (!processSpec) return { error: `Unknown process: ${process}` }
+
+  const voltageSpec = processSpec[voltage]
+
+  switch (queryType) {
+    case 'duty_cycle':
+      return {
+        process, voltage,
+        duty_cycles:    voltageSpec?.duty_cycles,
+        amperage_range: voltageSpec?.welding_current_range,
+        explanation:    specs.duty_cycle_explanation?.definition,
+        cooling_tip:    specs.duty_cycle_explanation?.cooling_tip,
+        thermal_protection: specs.duty_cycle_explanation?.thermal_protection,
+        at_max_amperage: voltageSpec?.duty_cycles?.[0],
+      }
+    case 'amperage_range':
+      return {
+        process, voltage,
+        welding_current_range:  voltageSpec?.welding_current_range,
+        current_input_at_output: voltageSpec?.current_input_at_output,
+      }
+    case 'wire_sizes':
+      return {
+        process, voltage,
+        wire_capacity: processSpec?.wire_capacity,
+        wire_type: process === 'MIG' ? 'Solid core (V-Groove roller)' : 'Flux-cored (Knurled roller)',
+      }
+    case 'polarity':
+      return {
+        process,
+        polarity:       processSpec?.polarity,
+        polarity_setup: processSpec?.polarity_setup,
+        note: process === 'Flux-Cored'
+          ? 'REVERSED vs MIG: Ground → Positive socket; Wire Feed Power → Negative socket'
+          : undefined,
+      }
+    case 'gas':
+      return {
+        process,
+        shielding_gas:  processSpec?.shielding_gas,
+        gas_flow_rate:  processSpec?.gas_flow_rate,
+        gas_required:   !String(processSpec?.shielding_gas ?? '').startsWith('None'),
+      }
+    case 'materials':
+      return {
+        process,
+        weldable_materials: processSpec?.weldable_materials,
+        notes: processSpec?.notes,
+      }
+    case 'all':
+    default:
+      return {
+        process, voltage,
+        ...voltageSpec,
+        polarity:           processSpec?.polarity,
+        polarity_setup:     processSpec?.polarity_setup,
+        weldable_materials: processSpec?.weldable_materials,
+        wire_capacity:      processSpec?.wire_capacity,
+        shielding_gas:      processSpec?.shielding_gas,
+        gas_flow_rate:      processSpec?.gas_flow_rate,
+        notes:              processSpec?.notes,
+        duty_cycle_explanation: specs.duty_cycle_explanation,
+      }
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// get_procedure
+// ─────────────────────────────────────────────────────────────────────────────
+
+export type ProcedureSection =
+  | 'cable_setup' | 'steps' | 'wire_setup' | 'gas_setup'
+  | 'settings' | 'welding_technique' | 'all'
+
+export function getProcedure(
+  process: Process,
+  section: ProcedureSection,
+): Record<string, unknown> {
+  const proc = procedures.setup_procedures?.[process]
+  if (!proc) return { error: `Unknown process: ${process}` }
+
+  switch (section) {
+    case 'cable_setup':
+      return {
+        process,
+        polarity:   proc.polarity,
+        cable_setup: proc.cable_setup,
+        key_difference_from_mig: proc.key_difference_from_mig,
+        note: process === 'Flux-Cored'
+          ? 'REVERSED vs MIG. Ground → Positive socket; Wire Feed Power → Negative socket.'
+          : process === 'TIG'
+            ? 'DCEN: Ground → Positive socket; TIG Torch → Negative socket.'
+            : undefined,
+      }
+    case 'steps':
+      return {
+        process,
+        steps:        proc.steps,
+        polarity:     proc.polarity,
+        gas_required: proc.gas_required,
+        wire_type:    proc.wire_type,
+        feed_roller:  proc.feed_roller,
+      }
+    case 'wire_setup':
+      return {
+        process,
+        wire_type:    proc.wire_type,
+        wire_sizes:   proc.wire_sizes,
+        feed_roller:  proc.feed_roller,
+        feed_tension: proc.feed_tension,
+        spool_setup:  procedures.wire_spool_setup,
+        roller_guide: procedures.feed_roller_guide,
+      }
+    case 'gas_setup':
+      return {
+        process,
+        gas_required: proc.gas_required,
+        gas_type:     proc.gas_type,
+        gas_flow:     proc.gas_flow,
+        note: proc.gas_required
+          ? `Gas required. Set regulator to ${proc.gas_flow}.`
+          : 'No gas required (self-shielded or electrode-shielded).',
+      }
+    case 'settings':
+      return {
+        process,
+        settings_sequence: proc.settings_sequence,
+        optional_settings: proc.optional_settings,
+        welding_tip:       proc.gun_angle ?? proc.arc_start_method,
+        ctwd:              proc.ctwd,
+      }
+    case 'welding_technique':
+      return {
+        process,
+        technique:  proc.welding_technique,
+        gun_angle:  proc.gun_angle,
+        ctwd:       proc.ctwd,
+        arc_start:  proc.arc_start_method,
+      }
+    case 'all':
+    default:
+      return {
+        process,
+        ...proc,
+        polarity_summary: procedures.polarity_summary?.configurations?.find(
+          (c: { process: string }) => c.process.startsWith(process),
+        ),
+      }
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// troubleshoot
+// ─────────────────────────────────────────────────────────────────────────────
+
+interface CauseAndSolution { cause: string; solution: string }
+interface ProblemMatch {
+  symptom: string; applies_to: string[]
+  causes_and_solutions: CauseAndSolution[]
+  score: number; section: string
+}
+
+const STOP_WORDS = new Set([
+  'the','and','for','are','but','not','you','all','can','had','was','one','our',
+  'out','get','use','how','its','has','did','may','let','put','too','any','she',
+  'see','when','what','that','with','have','this','will','your','from','they',
+  'know','want','been','good','much','some','time','very','does','into','just',
+  'like','make','over','such','well','also',
+])
+
+function score(query: string, target: string): number {
+  const words = query.toLowerCase().replace(/[^a-z0-9\s]/g,' ').split(/\s+/)
+    .filter(w => w.length > 2 && !STOP_WORDS.has(w))
+  const t = target.toLowerCase()
+  return words.reduce((n, w) => t.includes(w) ? n + 1 : n, 0)
+}
+
+export function troubleshoot(
+  symptom: string,
+  process?: Process,
+): Record<string, unknown> {
+  const ts = troubleshootingData.troubleshooting
+  const diagnosis = troubleshootingData.weld_diagnosis
+  const results: ProblemMatch[] = []
+
+  const sections: { key: string; data: any }[] = []
+  if (!process || process === 'MIG' || process === 'Flux-Cored')
+    sections.push({ key: 'Wire welding (MIG/Flux-Cored)', data: ts.wire_welding })
+  if (!process || process === 'TIG' || process === 'Stick')
+    sections.push({ key: 'TIG/Stick', data: ts.tig_stick_welding })
+
+  for (const { key, data } of sections) {
+    for (const p of data?.problems ?? []) {
+      const s = score(symptom, p.symptom)
+      if (s > 0) results.push({ symptom: p.symptom, applies_to: data.applies_to, causes_and_solutions: p.causes_and_solutions, score: s, section: key })
+    }
+  }
+
+  const diagSections = [
+    { key: 'Wire weld diagnosis', data: diagnosis?.wire_welding },
+    { key: 'Stick weld diagnosis', data: diagnosis?.stick_welding },
+  ]
+  for (const { key, data } of diagSections) {
+    if (!data) continue
+    for (const b of data.bead_problems ?? []) {
+      const s = score(symptom, [b.problem, b.appearance, ...(b.causes ?? [])].join(' '))
+      if (s > 0) results.push({
+        symptom: b.problem, applies_to: data.applies_to ?? [], section: key, score: s,
+        causes_and_solutions: b.fix
+          ? [{ cause: b.problem, solution: b.fix }]
+          : (b.causes ?? []).map((c: string) => ({ cause: c, solution: 'See weld diagnosis section.' })),
+      })
+    }
+  }
+
+  results.sort((a, b) => b.score - a.score)
+  const top = results.slice(0, 3)
+
+  if (top.length === 0) {
+    const fallback = sections[0]?.data?.problems?.slice(0, 3) ?? []
+    return {
+      symptom, process: process ?? 'all',
+      note: 'No close keyword match. Showing general entries.',
+      results: fallback.map((p: any) => ({ symptom: p.symptom, causes_and_solutions: p.causes_and_solutions })),
+    }
+  }
+
+  return {
+    symptom, process: process ?? 'all',
+    matches_found: top.length,
+    results: top.map(({ symptom: s, applies_to, causes_and_solutions, section }) => ({
+      symptom: s, applies_to, section, causes_and_solutions,
+    })),
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// get_image
+// ─────────────────────────────────────────────────────────────────────────────
+
+const IMAGE_MAP: Record<string, { path: string; description: string; manual_page?: number }> = {
+  product_front:              { path: '/product.webp',                                              description: 'Front view of Vulcan OmniPro 220' },
+  product_inside:             { path: '/product-inside.webp',                                       description: 'Interior: wire feed, spool, settings chart' },
+  specs_page:                 { path: '/manual-pages/page-07-specs.png',                            description: 'Technical specifications', manual_page: 7 },
+  front_panel_controls:       { path: '/manual-pages/page-08-front-panel-controls.png',             description: 'Front panel controls diagram', manual_page: 8 },
+  interior_controls:          { path: '/manual-pages/page-09-interior-controls.png',                description: 'Interior controls diagram', manual_page: 9 },
+  wire_spool_loading_small:   { path: '/manual-pages/page-10-wire-spool-setup.png',                description: '1-2 lb wire spool loading', manual_page: 10 },
+  wire_spool_loading_large:   { path: '/manual-pages/page-10-wire-spool-setup.png',                description: '10-12 lb wire spool with adapter', manual_page: 10 },
+  feed_roller_types:          { path: '/manual-pages/page-12-feed-roller.png',                     description: 'V-Groove (solid) vs Knurled (flux-cored)', manual_page: 12 },
+  polarity_dcen_flux:         { path: '/manual-pages/page-13-dcen-flux-polarity.png',              description: 'DCEN polarity for Flux-Cored', manual_page: 13 },
+  gun_cable_connector:        { path: '/manual-pages/page-13-dcen-flux-polarity.png',              description: 'Gun Cable Connector insertion diagram', manual_page: 13 },
+  polarity_dcep_mig:          { path: '/manual-pages/page-14-dcep-mig-polarity-gas.png',           description: 'DCEP polarity for MIG', manual_page: 14 },
+  wire_threading:             { path: '/manual-pages/page-15-wire-threading.png',                  description: 'Wire threading procedure', manual_page: 15 },
+  duty_cycle_diagram_mig_120v: { path: '/manual-pages/page-19-duty-cycle-mig.png',                description: 'MIG duty cycle chart', manual_page: 19 },
+  duty_cycle_diagram_mig_240v: { path: '/manual-pages/page-19-duty-cycle-mig.png',                description: 'MIG duty cycle chart', manual_page: 19 },
+  settings_lcd:               { path: '/manual-pages/page-20-settings-lcd.png',                    description: 'LCD settings screen', manual_page: 20 },
+  optional_settings:          { path: '/manual-pages/page-21-optional-settings.png',               description: 'Optional settings menu', manual_page: 21 },
+  welding_angles:             { path: '/manual-pages/page-22-welding-angles-technique.png',        description: 'Gun angles: push (MIG) and drag (flux-cored)', manual_page: 22 },
+  stringer_vs_weave:          { path: '/manual-pages/page-22-welding-angles-technique.png',        description: 'Stringer vs weave bead', manual_page: 22 },
+  polarity_tig:               { path: '/manual-pages/page-24-tig-setup-cables.png',               description: 'TIG cable setup (DCEN)', manual_page: 24 },
+  tig_gas_setup:              { path: '/manual-pages/page-25-tig-gas-setup.png',                   description: 'TIG Argon gas setup', manual_page: 25 },
+  tig_torch_assembly:         { path: '/manual-pages/page-26-tig-torch-assembly-grinding.png',     description: 'TIG torch assembly', manual_page: 26 },
+  electrode_grinding:         { path: '/manual-pages/page-26-tig-torch-assembly-grinding.png',     description: 'Tungsten grinding technique', manual_page: 26 },
+  polarity_stick:             { path: '/manual-pages/page-27-stick-setup-cables.png',             description: 'Stick cable setup (DCEP)', manual_page: 27 },
+  duty_cycle_diagram_tig_stick: { path: '/manual-pages/page-29-duty-cycle-tig-stick.png',         description: 'TIG and Stick duty cycle chart', manual_page: 29 },
+  tig_settings:               { path: '/manual-pages/page-30-tig-welding-settings.png',            description: 'TIG welding settings', manual_page: 30 },
+  stick_settings:             { path: '/manual-pages/page-32-stick-welding-settings.png',          description: 'Stick welding settings', manual_page: 32 },
+  weld_diagnosis_wire:        { path: '/manual-pages/page-35-weld-diagnosis-wire.png',             description: 'Wire weld bead diagnosis', manual_page: 35 },
+  weld_penetration_profiles:  { path: '/manual-pages/page-36-wire-penetration.png',               description: 'Wire weld penetration profiles', manual_page: 36 },
+  porosity_spatter_wire:      { path: '/manual-pages/page-37-wire-porosity-spatter.png',           description: 'Wire weld porosity and spatter', manual_page: 37 },
+  weld_diagnosis_stick:       { path: '/manual-pages/page-38-weld-diagnosis-stick.png',            description: 'Stick weld bead diagnosis', manual_page: 38 },
+  stick_penetration_profiles: { path: '/manual-pages/page-39-stick-penetration.png',              description: 'Stick weld penetration profiles', manual_page: 39 },
+  porosity_spatter_stick:     { path: '/manual-pages/page-40-stick-porosity-spatter.png',          description: 'Stick weld porosity and spatter', manual_page: 40 },
+  maintenance:                { path: '/manual-pages/page-41-maintenance.png',                     description: 'Maintenance and cleaning', manual_page: 41 },
+  troubleshoot_wire_1:        { path: '/manual-pages/page-42-troubleshoot-wire-1.png',             description: 'Wire welding troubleshooting (part 1)', manual_page: 42 },
+  troubleshoot_wire_2:        { path: '/manual-pages/page-43-troubleshoot-wire-2.png',             description: 'Wire welding troubleshooting (part 2)', manual_page: 43 },
+  troubleshoot_tig_stick:     { path: '/manual-pages/page-44-troubleshoot-tig-stick.png',          description: 'TIG/Stick troubleshooting', manual_page: 44 },
+  wiring_schematic:           { path: '/manual-pages/page-45-wiring-schematic.png',               description: 'Full internal wiring schematic', manual_page: 45 },
+  parts_list:                 { path: '/manual-pages/page-46-parts-list.png',                     description: 'Parts list', manual_page: 46 },
+  assembly_diagram:           { path: '/manual-pages/page-47-assembly-diagram.png',               description: 'Assembly diagram', manual_page: 47 },
+  quick_start_guide:          { path: '/manual-pages/quick-start-page-1.png',                     description: 'Quick start: wire welding setup' },
+  quick_start_wire:           { path: '/manual-pages/quick-start-page-1.png',                     description: 'Quick start: spool loading and settings' },
+  quick_start_cable:          { path: '/manual-pages/quick-start-page-2.png',                     description: 'Quick start: cable diagrams all processes' },
+  selection_chart:            { path: '/manual-pages/selection-chart.png',                         description: 'How to Choose a Welder: 6-step matrix' },
+}
+
+function resolveFromImageRefs(imageId: string) {
+  const diagrams = imageRefs.image_references?.manual_diagrams
+  const entry = diagrams?.[imageId]
+  if (!entry?.manual_page) return null
+  for (const [, v] of Object.entries(IMAGE_MAP) as [string, { path: string; description: string; manual_page?: number }][]) {
+    if (v.manual_page === entry.manual_page) return { path: v.path, description: entry.description, manual_page: entry.manual_page }
+  }
+  return null
+}
+
+export function getImage(imageId: string): Record<string, unknown> {
+  const known = IMAGE_MAP[imageId]
+  if (known) return { image_id: imageId, file_path: known.path, description: known.description, manual_page: known.manual_page, display: true }
+
+  const fromRefs = resolveFromImageRefs(imageId)
+  if (fromRefs) return { image_id: imageId, ...fromRefs, display: true }
+
+  return { error: `Unknown image_id: "${imageId}"`, available_ids: Object.keys(IMAGE_MAP) }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// generate_artifact — bundles data for interactive UI components
+// ─────────────────────────────────────────────────────────────────────────────
+
+export function generateArtifact(
+  artifactType: string,
+  params: Record<string, unknown>,
+): Record<string, unknown> {
+  switch (artifactType) {
+
+    case 'duty_cycle_calculator': {
+      // Bundle ALL duty cycle data so the component is fully interactive
+      const allDutyCycles: Record<string, unknown> = {}
+      for (const proc of ['MIG', 'Flux-Cored', 'TIG', 'Stick']) {
+        const pSpec = specs.specifications?.[proc]
+        if (!pSpec) continue
+        allDutyCycles[proc] = {
+          '120V': { duty_cycles: pSpec['120V']?.duty_cycles, range: pSpec['120V']?.welding_current_range },
+          '240V': { duty_cycles: pSpec['240V']?.duty_cycles, range: pSpec['240V']?.welding_current_range },
+        }
+      }
+      return {
+        artifact_type: 'duty_cycle_calculator',
+        render: true,
+        title: params.title ?? 'Duty Cycle Calculator',
+        initialProcess: params.process ?? 'MIG',
+        initialVoltage: params.voltage ?? '240V',
+        data: {
+          allDutyCycles,
+          explanation: specs.duty_cycle_explanation,
+        },
+      }
+    }
+
+    case 'polarity_configurator': {
+      return {
+        artifact_type: 'polarity_configurator',
+        render: true,
+        title: params.title ?? 'Polarity Configurator',
+        initialProcess: params.process ?? 'MIG',
+        data: {},
+      }
+    }
+
+    case 'troubleshooting_checklist': {
+      // Accept either a flat causes array or the full troubleshoot result
+      return {
+        artifact_type: 'troubleshooting_checklist',
+        render: true,
+        title: params.title ?? 'Troubleshooting Checklist',
+        data: {
+          symptom: params.symptom,
+          process: params.process,
+          causes:  params.causes,
+          results: params.results,
+        },
+      }
+    }
+
+    default:
+      return { error: `Unknown artifact_type: "${artifactType}"` }
+  }
+}

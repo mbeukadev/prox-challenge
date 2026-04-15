@@ -1,0 +1,162 @@
+{
+  "safety": {
+    "universal_warnings": [
+      {
+        "hazard": "Electric Shock",
+        "severity": "FATAL",
+        "rules": [
+          "Turn off, disconnect power, and discharge electrode to ground before setting down torch/electrode holder and before service",
+          "Do not touch energized electrical parts",
+          "Wear dry, insulating gloves — do not wear wet or damaged gloves",
+          "Connect to grounded, GFCI-protected power supply only",
+          "Do not use near water or damp objects",
+          "People with pacemakers must consult physician before use",
+          "Insulate yourself from workpiece and ground — use dry rubber mats, plywood, or dry insulating material"
+        ],
+        "applies_to": ["MIG", "Flux-Cored", "TIG", "Stick"]
+      },
+      {
+        "hazard": "Arc Ray Burns",
+        "severity": "SERIOUS",
+        "rules": [
+          "Wear ANSI-approved welding eye protection with at least shade number 10 lens",
+          "Wear leather leggings, fire resistant shoes or boots",
+          "Do not wear pants with cuffs or shirts with open pockets",
+          "Wear dry, insulating gloves and protective clothing",
+          "Wear approved head covering to protect head and neck",
+          "Wear approved welding jacket or long sleeves",
+          "Light from the arc can cause PERMANENT damage to eyes and skin"
+        ],
+        "applies_to": ["MIG", "Flux-Cored", "TIG", "Stick"]
+      },
+      {
+        "hazard": "Fumes and Gas Inhalation",
+        "severity": "SERIOUS — Cancer Risk",
+        "rules": [
+          "Welding and plasma cutting produce TOXIC fumes",
+          "Exposure can increase risk of cancer (larynx, lung), early-onset Parkinson's, heart disease, kidney damage, respiratory diseases",
+          "Use natural or forced air ventilation",
+          "Wear NIOSH-approved respirator",
+          "Keep head out of fumes",
+          "Work in confined areas only if well-ventilated or wearing air-supplied respirator"
+        ],
+        "applies_to": ["MIG", "Flux-Cored", "TIG", "Stick"]
+      },
+      {
+        "hazard": "Fire",
+        "severity": "SERIOUS",
+        "rules": [
+          "Clear flammable objects for radius of 35 feet (10 meters)",
+          "Keep ABC-type fire extinguisher nearby",
+          "Do not weld on materials with combustible coating or internal structure",
+          "After welding, examine thoroughly for evidence of fire",
+          "Do not apply heat to containers that held unknown or combustible substances"
+        ],
+        "applies_to": ["MIG", "Flux-Cored", "TIG", "Stick"]
+      }
+    ],
+
+    "process_specific_warnings": {
+      "MIG": [
+        {
+          "hazard": "Gas Asphyxiation",
+          "severity": "FATAL",
+          "warning": "Shielding gas can displace air and cause rapid loss of consciousness and death. Do not open gas without proper ventilation. Fix gas leaks immediately.",
+          "additional": "Shielding gas without carbon dioxide (like pure Argon) can be even more hazardous because asphyxiation can start WITHOUT feeling shortness of breath."
+        },
+        {
+          "hazard": "Wire Feed Mechanism",
+          "severity": "SERIOUS",
+          "warning": "Keep hands away from Wire Feed mechanism. Close door before plugging in unless using Cold Wire Feed. Do not touch Trigger while feeding wire through to gun."
+        },
+        {
+          "hazard": "Live Wire/Tip",
+          "severity": "SERIOUS",
+          "warning": "Keep welding tip clear of grounded objects whenever unit is plugged in and turned on. After welding, rest MIG Gun on electrically non-conductive, heat-proof surface."
+        }
+      ],
+
+      "Flux-Cored": [
+        {
+          "hazard": "Wire Feed Mechanism",
+          "severity": "SERIOUS",
+          "warning": "Same as MIG — keep hands away from Wire Feed mechanism."
+        },
+        {
+          "hazard": "Slag Burns",
+          "severity": "MODERATE",
+          "warning": "Flux-cored welds produce slag. Use chipping hammer carefully. Wear safety goggles during slag removal."
+        }
+      ],
+
+      "TIG": [
+        {
+          "hazard": "Argon Asphyxiation",
+          "severity": "FATAL",
+          "warning": "100% Argon can displace air and cause rapid loss of consciousness and death WITHOUT feeling shortness of breath. Do not open gas without proper ventilation. Fix gas leaks immediately.",
+          "critical_note": "Pure Argon is MORE dangerous than CO2 mixes because you won't feel breathless before losing consciousness."
+        },
+        {
+          "hazard": "Open Circuit Voltage",
+          "severity": "SERIOUS",
+          "warning": "When Right Knob is set to ON, the Welder is energized and Open Circuit Voltage (86 VDC) is present on the TIG Torch at all times — even when not welding.",
+          "rule": "Always turn Right Knob to OFF before setting down torch."
+        },
+        {
+          "hazard": "Grounding Requirement",
+          "severity": "FATAL",
+          "warning": "Do not weld without Grounding Clamp. Metal work bench MUST be grounded when TIG welding."
+        },
+        {
+          "hazard": "Tungsten Grinding",
+          "severity": "MODERATE",
+          "warning": "Some Electrodes have hazardous materials. Wear respirator and ANSI-approved safety goggles when grinding."
+        },
+        {
+          "hazard": "TIG Rod Handling",
+          "severity": "SERIOUS",
+          "warning": "Only hold TIG Rod with electrically insulated welding glove."
+        }
+      ],
+
+      "Stick": [
+        {
+          "hazard": "Open Circuit Voltage",
+          "severity": "SERIOUS",
+          "warning": "When Right Knob is set to ON, the Welder is energized and Open Circuit Voltage (86 VDC) is present on the Electrode Holder at all times.",
+          "rule": "Always turn Right Knob to OFF before setting down Electrode Holder."
+        },
+        {
+          "hazard": "Grounding Requirement",
+          "severity": "FATAL",
+          "warning": "Do not weld without Grounding Clamp."
+        },
+        {
+          "hazard": "Slag Burns",
+          "severity": "MODERATE",
+          "warning": "Stick welds produce slag. Use chipping hammer carefully. Wear safety goggles during slag removal."
+        }
+      ]
+    },
+
+    "general_rules": {
+      "extension_cords": "Do NOT use an extension cord on this welder.",
+      "vehicle_welding": "When welding on a vehicle, disconnect battery from both positive and ground BEFORE welding. Prevents damage to electrical systems.",
+      "cylinder_safety": [
+        "Do not weld on a pressurized or closed cylinder",
+        "Keep cylinders away from electrical circuits",
+        "Keep protective cap in place except when in use",
+        "Protect from heat, being struck, flames, sparks, arcs"
+      ],
+      "minimum_ppe": [
+        "Shade 10+ welding helmet/mask",
+        "Ear protection",
+        "Welding gloves (dry, insulating)",
+        "Sleeves and apron",
+        "NIOSH-approved respirator",
+        "Fire-resistant work clothes without pockets",
+        "Fire-resistant shoes or boots"
+      ]
+    }
+  }
+}
