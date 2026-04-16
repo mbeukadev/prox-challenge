@@ -54,11 +54,11 @@ function CheckItem({
         {/* Checkbox */}
         <button
           onClick={() => setChecked(!checked)}
-          className="mt-0.5 flex-shrink-0 text-[#4a5568] hover:text-[#5eead4] transition-colors"
+          className="mt-0.5 flex-shrink-0 text-[#4a5568] hover:text-[#f0f4f8] transition-colors"
           aria-label={checked ? 'Mark unchecked' : 'Mark checked'}
         >
           {checked
-            ? <CheckSquare size={14} className="text-[#5eead4]" />
+            ? <CheckSquare size={14} className="text-[#22c55e]" />
             : <Square size={14} />
           }
         </button>
@@ -135,7 +135,7 @@ export default function TroubleshootingChecklist({ data }: TroubleshootingCheckl
             <p className="text-[11px] text-[#4a5568] uppercase tracking-wider">Symptom</p>
             <p className="text-[13px] font-medium text-[#f0f4f8] capitalize mt-0.5">{symptom}</p>
             {process && process !== 'all' && (
-              <span className="inline-block mt-1 text-[10px] text-[#5eead4] bg-[#1a3a38] border border-[#243040] rounded px-1.5 py-0.5">
+              <span className="inline-block mt-1 text-[10px] text-[#f0f4f8] bg-[#1a2332] border border-[#243040] rounded px-1.5 py-0.5">
                 {process}
               </span>
             )}

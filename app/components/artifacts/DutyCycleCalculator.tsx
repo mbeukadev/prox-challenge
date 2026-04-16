@@ -70,11 +70,11 @@ function DutyCycleClock({ entry }: { entry: DutyCycleEntry }) {
             stroke="#1e2b3a"
             strokeWidth={strokeW}
           />
-          {/* Weld arc (teal) */}
+          {/* Weld arc */}
           <circle
             cx={CX} cy={CY} r={R}
             fill="none"
-            stroke="#5eead4"
+            stroke="#e2e8f0"
             strokeWidth={strokeW}
             strokeLinecap="round"
             strokeDasharray={`${weldArc} ${circumference - weldArc}`}
@@ -118,7 +118,7 @@ function DutyCycleClock({ entry }: { entry: DutyCycleEntry }) {
       {/* Weld / Rest legend */}
       <div className="flex items-center gap-5 text-[12px]">
         <div className="flex items-center gap-1.5">
-          <span className="w-2.5 h-2.5 rounded-full bg-[#5eead4]" />
+          <span className="w-2.5 h-2.5 rounded-full bg-[#e2e8f0]" />
           <span className="text-[#c4cdd8] font-medium">{weldMin} min</span>
           <span className="text-[#4a5568]">weld</span>
         </div>
@@ -154,7 +154,7 @@ function AmperagePills({
           className={`
             px-3 py-1.5 rounded text-[11px] font-medium border transition-colors
             ${selected === i
-              ? 'bg-[#1a3a38] border-[#5eead4] text-[#5eead4]'
+              ? 'bg-[#1a2332] border-[#2d3f52] text-[#f0f4f8]'
               : 'bg-[#141c24] border-[#1e2b3a] text-[#8892a4] hover:border-[#243040] hover:text-[#c4cdd8]'
             }
           `}

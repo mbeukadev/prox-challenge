@@ -163,7 +163,7 @@ export default function PolarityConfigurator({ initialProcess = 'MIG' }: Polarit
         <span className="text-[11px] font-semibold text-[#8892a4] uppercase tracking-wider">
           Polarity Configurator
         </span>
-        <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-[#5eead4] bg-[#1a3a38] border border-[#243040] rounded px-1.5 py-0.5">
+        <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-[#f0f4f8] bg-[#1a2332] border border-[#2d3f52] rounded px-1.5 py-0.5">
           {config.polarity_name}
         </span>
       </div>
