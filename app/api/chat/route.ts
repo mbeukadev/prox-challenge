@@ -15,6 +15,15 @@ const SYSTEM_PROMPT = `You are an expert technician for the Vulcan OmniPro 220 m
 - Setup procedure, polarity, cable configuration → get_procedure
 - Any symptom or welding problem → troubleshoot
 - Diagram, photo, or visual reference → get_image
+- WHERE is a physical component on the machine → show_component
+
+**show_component — use this whenever the user asks where something is located:**
+- "Where is the power switch?" → show_component(component="power_switch")
+- "Where do I plug in the ground clamp?" → show_component(component="positive_socket") + explain polarity
+- "Where is the wire spool?" → show_component(component="wire_spool", tab="interior")
+- "How do I adjust wire tension?" → show_component(component="tension_knob", tab="interior")
+- Any question about a physical location, port, knob, or control on the machine → show_component
+- ALWAYS call show_component in addition to your text explanation for physical location questions
 
 **If the user sends a photo of their weld bead or machine:**
 - Analyze visible defects: porosity, undercut, spatter, burn-through, cold lap, inconsistent bead width, bird's nest
@@ -23,11 +32,19 @@ const SYSTEM_PROMPT = `You are an expert technician for the Vulcan OmniPro 220 m
 
 **After answering in text, call generate_artifact when applicable:**
 - Duty cycle question → generate_artifact(artifact_type="duty_cycle_calculator", process=..., voltage=...)
-- Polarity/cable setup question → generate_artifact(artifact_type="polarity_configurator", process=...)
+- Polarity/cable setup question → generate_artifact(artifact_type="polarity_configurator", process=...) AND show_component(component="positive_socket") AND show_component(component="negative_socket")
 - Troubleshoot result with 3+ causes → generate_artifact(artifact_type="troubleshooting_checklist", symptom=..., causes=[list of {cause,solution} from the troubleshoot result])
 - Do NOT generate an artifact for simple one-line answers.
 
-**For polarity questions: call get_image for the manual diagram AND generate_artifact for the interactive configurator.**
+**For polarity questions: call get_image for the manual diagram AND generate_artifact for the interactive configurator AND show_component for the relevant sockets.**
+
+**Response style — strictly enforced:**
+- No emojis. None. Ever.
+- No ### or ## or # headers. Use plain prose with a bolded label if a section break is needed.
+- No --- horizontal rules.
+- Lead with the direct answer, then supporting detail. Be concise.
+- Bullet lists are fine for multi-item answers. Numbered lists for ordered steps.
+- Bold (**text**) only the single most critical number or term per response — not decoratively.
 
 Answer first in text, be concise, give exact numbers. Then call artifact tools.`
 
@@ -60,7 +77,7 @@ async function runAgentStream(
     >()
 
     const stream = client.messages.stream({
-      model: 'claude-haiku-4-5-20251001',
+      model: 'claude-sonnet-4-6',
       max_tokens: 2048,
       system: SYSTEM_PROMPT,
       tools: TOOL_DEFINITIONS,
@@ -143,8 +160,25 @@ export async function POST(req: Request) {
           await runAgentStream(messages as MessageParam[], emit)
           emit({ type: 'done' })
         } catch (err) {
-          const message = err instanceof Error ? err.message : String(err)
           console.error('Agent stream error:', err)
+
+          // Extract a clean message from Anthropic SDK errors
+          let message = err instanceof Error ? err.message : String(err)
+          try {
+            const parsed = JSON.parse(message)
+            const inner = parsed?.error?.message || parsed?.message
+            if (inner) message = inner
+          } catch { /* not JSON, keep as-is */ }
+
+          // Map known Anthropic error types to friendly messages
+          if (message.toLowerCase().includes('overload') || (err as { status?: number })?.status === 529) {
+            message = 'The AI service is currently overloaded. Please wait a moment and try again.'
+          } else if ((err as { status?: number })?.status === 401) {
+            message = 'Invalid ANTHROPIC_API_KEY. Check your .env file.'
+          } else if ((err as { status?: number })?.status === 429) {
+            message = 'Rate limit reached. Please wait a moment and try again.'
+          }
+
           emit({ type: 'error', message })
         } finally {
           controller.close()

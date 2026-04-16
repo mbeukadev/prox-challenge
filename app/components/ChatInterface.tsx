@@ -11,8 +11,13 @@ import {
   ArrowRight,
   Check,
   ChevronRight,
-  Paperclip,
+  Camera,
   X,
+  AlertCircle,
+  Scan,
+  Mic,
+  Volume2,
+  VolumeX,
 } from 'lucide-react'
 import ImageViewer from './ImageViewer'
 import ArtifactRenderer, { type ArtifactResult } from './ArtifactRenderer'
@@ -31,16 +36,18 @@ interface Message {
   id: string
   role: 'user' | 'assistant'
   content: string
-  imagePreview?: string    // data URL — for rendering in the bubble
-  imageBase64?: string     // raw base64 — for reconstructing API history
+  imagePreview?: string    // data URL for rendering
+  imageBase64?: string     // raw base64 for API history
   imageMimeType?: string
+  imageSource?: 'scan'     // set when photo came from camera capture
   toolCalls?: ToolCall[]
 }
 
 interface PendingImage {
   base64: string
   mimeType: string
-  preview: string  // data URL
+  preview: string
+  source?: 'scan'
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -81,6 +88,14 @@ function extractArtifacts(toolCalls: ToolCall[]): ArtifactResult[] {
     .map((tc) => tc.result as unknown as ArtifactResult)
 }
 
+function stripMarkdown(text: string): string {
+  return text
+    .replace(/\*\*(.*?)\*\*/g, '$1')
+    .replace(/`([^`]+)`/g, '$1')
+    .replace(/^[-\d]+\.? (.+)$/gm, '$1')
+    .replace(/<[^>]*>/g, '')
+}
+
 // ─────────────────────────────────────────────────────────────────────────────
 // Tool badge
 // ─────────────────────────────────────────────────────────────────────────────
@@ -113,15 +128,117 @@ function ToolBadge({ call, loading }: { call: ToolCall; loading?: boolean }) {
 // ─────────────────────────────────────────────────────────────────────────────
 
 function renderMarkdown(text: string): string {
-  return text
+  // Strip emojis entirely
+  const noEmoji = text.replace(
+    /[\u{1F000}-\u{1FFFF}]|[\u{2600}-\u{27BF}]|[\u{FE00}-\u{FE0F}]|[\u{1F900}-\u{1F9FF}]|\u{200D}|\u{FE0F}/gu,
+    '',
+  ).replace(/\s{2,}/g, ' ')  // collapse double-spaces left by stripped emojis
+
+  const lines = noEmoji.split('\n')
+  const out: string[] = []
+  let inUl = false
+  let inOl = false
+
+  function closeList() {
+    if (inUl) { out.push('</ul>'); inUl = false }
+    if (inOl) { out.push('</ol>'); inOl = false }
+  }
+
+  for (const raw of lines) {
+    const line = raw.trim()
+
+    // Horizontal rule
+    if (/^---+$/.test(line)) { closeList(); out.push('<hr />'); continue }
+
+    // ### / ## / # headers → styled span, not a heavy heading
+    const hMatch = line.match(/^#{1,3} (.+)$/)
+    if (hMatch) {
+      closeList()
+      const level = line.match(/^(#+)/)?.[1].length ?? 1
+      const size  = level === 1 ? 'text-[13px]' : 'text-[12px]'
+      out.push(`<p class="mt-3 mb-1 ${size} font-semibold text-[#f0f4f8]">${inline(hMatch[1])}</p>`)
+      continue
+    }
+
+    // Unordered list
+    const ulMatch = line.match(/^[-*] (.+)$/)
+    if (ulMatch) {
+      if (!inUl) { if (inOl) { out.push('</ol>'); inOl = false } out.push('<ul>'); inUl = true }
+      out.push(`<li>${inline(ulMatch[1])}</li>`)
+      continue
+    }
+
+    // Ordered list
+    const olMatch = line.match(/^\d+\. (.+)$/)
+    if (olMatch) {
+      if (!inOl) { if (inUl) { out.push('</ul>'); inUl = false } out.push('<ol>'); inOl = true }
+      out.push(`<li>${inline(olMatch[1])}</li>`)
+      continue
+    }
+
+    // Empty line
+    if (line === '') { closeList(); out.push('<br />'); continue }
+
+    // Regular paragraph line
+    closeList()
+    out.push(`<span>${inline(line)}</span><br />`)
+  }
+
+  closeList()
+  return out.join('')
+}
+
+function inline(s: string): string {
+  return s
     .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.*?)\*/g, '<em>$1</em>')
     .replace(/`([^`]+)`/g, '<code>$1</code>')
-    .replace(/^- (.+)$/gm, '<li>$1</li>')
-    .replace(/(<li>[\s\S]*<\/li>)/, '<ul>$1</ul>')
-    .replace(/^\d+\. (.+)$/gm, '<li>$1</li>')
-    .replace(/\n\n/g, '</p><p>')
-    .replace(/\n/g, '<br />')
-    .replace(/^(.+)$/, '<p>$1</p>')
+    // strip any remaining emoji that sneak through inline
+    .replace(/[\u{1F000}-\u{1FFFF}]|[\u{2600}-\u{27BF}]/gu, '')
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Speaker button — reads assistant message aloud via SpeechSynthesis
+// ─────────────────────────────────────────────────────────────────────────────
+
+function SpeakerButton({ content }: { content: string }) {
+  const [speaking, setSpeaking] = useState(false)
+
+  // Don't render if TTS not available (SSR or unsupported browser)
+  if (typeof window === 'undefined' || !window.speechSynthesis) return null
+
+  function toggle() {
+    if (speaking) {
+      window.speechSynthesis.cancel()
+      setSpeaking(false)
+    } else {
+      const utterance = new SpeechSynthesisUtterance(stripMarkdown(content))
+      utterance.rate = 0.92
+      utterance.pitch = 1
+      utterance.onend   = () => setSpeaking(false)
+      utterance.onerror = () => setSpeaking(false)
+      window.speechSynthesis.speak(utterance)
+      setSpeaking(true)
+    }
+  }
+
+  return (
+    <button
+      onClick={toggle}
+      className={`
+        flex-shrink-0 w-5 h-5 flex items-center justify-center rounded
+        transition-colors duration-100 touch-manipulation
+        ${speaking
+          ? 'text-[#f0f4f8] bg-[#1a2332]'
+          : 'text-[#2d3f52] hover:text-[#8892a4]'
+        }
+      `}
+      aria-label={speaking ? 'Stop reading' : 'Read aloud'}
+      title={speaking ? 'Stop reading' : 'Read aloud'}
+    >
+      {speaking ? <VolumeX size={11} /> : <Volume2 size={11} />}
+    </button>
+  )
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -153,12 +270,21 @@ function MessageBubble({
       <div className="flex justify-end">
         <div className="max-w-[72%] bg-[#141c24] border border-[#1e2b3a] rounded-xl rounded-tr-sm overflow-hidden">
           {message.imagePreview && (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={message.imagePreview}
-              alt="Uploaded photo"
-              className="w-full max-h-56 object-cover border-b border-[#1e2b3a]"
-            />
+            <>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={message.imagePreview}
+                alt={message.imageSource === 'scan' ? 'Scanned image' : 'Uploaded photo'}
+                className="w-full max-h-56 object-cover"
+              />
+              {/* Image source badge */}
+              <div className="flex items-center gap-1.5 px-3 py-1.5 bg-[#0e1218] border-b border-[#1e2b3a]">
+                <Camera size={9} className="text-[#4a5568]" />
+                <span className="text-[10px] text-[#4a5568]">
+                  {message.imageSource === 'scan' ? 'Scanned image' : 'Uploaded photo'}
+                </span>
+              </div>
+            </>
           )}
           {message.content && (
             <p className="text-[13px] text-[#f0f4f8] leading-relaxed whitespace-pre-wrap px-4 py-2.5">
@@ -184,32 +310,67 @@ function MessageBubble({
       </div>
 
       <div className="flex-1 min-w-0 flex flex-col gap-2">
-        {/* Tool badges */}
+        {/* Tool badges — show up to 3 individually, collapse the rest */}
         {((message.toolCalls && message.toolCalls.length > 0) || activeTool) && (
-          <div className="flex flex-wrap gap-1">
-            {message.toolCalls?.map((tc, i) => <ToolBadge key={i} call={tc} />)}
+          <div className="flex flex-wrap gap-1 items-center">
+            {(message.toolCalls ?? []).slice(0, 3).map((tc, i) => <ToolBadge key={i} call={tc} />)}
+            {(message.toolCalls ?? []).length > 3 && (
+              <span className="text-[10px] text-[#4a5568] px-1.5">
+                +{(message.toolCalls ?? []).length - 3} more
+              </span>
+            )}
             {activeTool && <ToolBadge call={{ tool: activeTool, input: {} }} loading />}
           </div>
         )}
 
-        {/* Text */}
+        {/* Text / loading skeleton / error */}
         {message.content === '' ? (
-          <div className="flex items-center gap-2 py-1">
+          <div className="py-1">
             {activeTool ? (
               <span className="text-[12px] text-[#4a5568] italic">Analyzing results...</span>
             ) : (
-              <>
-                <span className="w-1 h-1 rounded-full bg-[#4a5568] animate-pulse" />
-                <span className="w-1 h-1 rounded-full bg-[#4a5568] animate-pulse [animation-delay:150ms]" />
-                <span className="w-1 h-1 rounded-full bg-[#4a5568] animate-pulse [animation-delay:300ms]" />
-              </>
+              <div className="flex flex-col gap-2 w-full max-w-[260px]">
+                <div className="h-2.5 rounded-full bg-[#1e2b3a] animate-pulse" />
+                <div className="h-2.5 rounded-full bg-[#1e2b3a] w-4/5 animate-pulse [animation-delay:80ms]" />
+                <div className="h-2.5 rounded-full bg-[#1e2b3a] w-3/5 animate-pulse [animation-delay:160ms]" />
+              </div>
             )}
           </div>
+        ) : (message.content.startsWith('Error:') || message.content.startsWith('Connection error')) ? (
+          <div className="rounded-lg border border-[#3a2020] bg-[#180f0f] px-4 py-3 flex items-start gap-3">
+            <AlertCircle size={14} className="text-[#f87171] mt-0.5 flex-shrink-0" />
+            <div className="min-w-0">
+              <p className="text-[12px] font-semibold text-[#f87171]">
+                {message.content.includes('ANTHROPIC_API_KEY') ? 'API Key Missing'
+                  : message.content.toLowerCase().includes('overload') ? 'Service Busy'
+                  : message.content.toLowerCase().includes('rate limit') ? 'Rate Limited'
+                  : 'Connection Error'}
+              </p>
+              <p className="text-[11px] text-[#fca5a5] mt-1 leading-relaxed">
+                {message.content.includes('ANTHROPIC_API_KEY')
+                  ? 'Set ANTHROPIC_API_KEY in your .env file and restart the dev server.'
+                  : message.content.replace(/^(Error:|Connection error\.?)\s*/i, '')
+                }
+              </p>
+              {message.content.includes('ANTHROPIC_API_KEY') && (
+                <code className="text-[10px] text-[#4a5568] mt-2 block font-mono">
+                  echo &quot;ANTHROPIC_API_KEY=sk-ant-...&quot; &gt; .env
+                </code>
+              )}
+            </div>
+          </div>
         ) : (
-          <div
-            className="message-content text-[13px] text-[#c4cdd8] leading-relaxed"
-            dangerouslySetInnerHTML={{ __html: renderMarkdown(message.content) }}
-          />
+          /* Text content row — message + speaker button */
+          <div className="flex items-start gap-2 group">
+            <div
+              className="flex-1 message-content text-[13px] text-[#c4cdd8] leading-relaxed"
+              dangerouslySetInnerHTML={{ __html: renderMarkdown(message.content) }}
+            />
+            {/* Speaker button — appears on hover (desktop) or always visible (mobile) */}
+            <div className="opacity-0 group-hover:opacity-100 sm:opacity-0 sm:group-hover:opacity-100 flex-shrink-0 mt-0.5 transition-opacity duration-150">
+              <SpeakerButton content={message.content} />
+            </div>
+          </div>
         )}
 
         {/* Manual page images */}
@@ -245,7 +406,8 @@ function MessageBubble({
 
 function EmptyState({ onSelect }: { onSelect: (p: string) => void }) {
   return (
-    <div className="flex flex-col items-center justify-center h-full gap-5 sm:gap-8 px-5 sm:px-6 py-6">
+    <div className="flex flex-col items-center justify-center h-full gap-5 sm:gap-6 px-5 sm:px-6 py-6">
+      {/* Title */}
       <div className="text-center">
         <div className="flex items-center justify-center gap-2.5 mb-3">
           <svg width="22" height="22" viewBox="0 0 20 20" fill="none">
@@ -260,14 +422,14 @@ function EmptyState({ onSelect }: { onSelect: (p: string) => void }) {
           Ask about specs, polarity setup, troubleshooting, or welding procedures.
           Answers pull from structured knowledge — not guesses.
         </p>
-        {/* Feature pills — hidden on mobile to keep the empty state uncluttered */}
+        {/* Feature pills — hidden on mobile */}
         <div className="hidden sm:flex items-center justify-center flex-wrap gap-1.5 mt-3">
           {[
-            { icon: <Database size={9} />,   label: 'Exact specs' },
-            { icon: <Zap size={9} />,        label: 'Polarity diagrams' },
-            { icon: <ImageIcon size={9} />,  label: 'Manual pages' },
-            { icon: <BarChart2 size={9} />,  label: 'Interactive visuals' },
-            { icon: <Paperclip size={9} />,  label: 'Photo analysis' },
+            { icon: <Database size={9} />,  label: 'Exact specs' },
+            { icon: <Zap size={9} />,       label: 'Polarity diagrams' },
+            { icon: <ImageIcon size={9} />, label: 'Manual pages' },
+            { icon: <BarChart2 size={9} />, label: 'Interactive visuals' },
+            { icon: <Camera size={9} />,    label: 'Weld Scanner' },
           ].map((f) => (
             <span key={f.label}
               className="inline-flex items-center gap-1 text-[10px] text-[#4a5568] bg-[#141c24] border border-[#1e2b3a] rounded-full px-2 py-0.5">
@@ -277,15 +439,16 @@ function EmptyState({ onSelect }: { onSelect: (p: string) => void }) {
         </div>
       </div>
 
-      {/* Single column on mobile (<640px), 2 columns on sm+ */}
+      {/* Suggested question cards — 1-col mobile, 2-col sm+ */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 w-full max-w-md">
         {SUGGESTED.map((s) => (
           <button
             key={s.label}
             onClick={() => onSelect(s.prompt)}
             className="group text-left px-3.5 py-3 rounded-lg bg-[#141c24] border border-[#1e2b3a]
-              hover:border-[#243040] hover:bg-[#1a2332] active:bg-[#1a2332] transition-colors duration-100
-              touch-manipulation"
+              hover:border-[#243040] hover:bg-[#1a2332] hover:-translate-y-0.5 hover:shadow-[0_4px_16px_rgba(0,0,0,0.4)]
+              active:bg-[#1a2332] active:translate-y-0
+              transition-all duration-150 touch-manipulation"
           >
             <div className="flex items-start justify-between gap-2">
               <span className="text-[12px] font-medium text-[#8892a4] group-hover:text-[#c4cdd8] leading-snug transition-colors">
@@ -297,6 +460,7 @@ function EmptyState({ onSelect }: { onSelect: (p: string) => void }) {
           </button>
         ))}
       </div>
+
     </div>
   )
 }
@@ -307,18 +471,30 @@ function EmptyState({ onSelect }: { onSelect: (p: string) => void }) {
 
 export interface ChatInterfaceHandle {
   sendMessage: (text: string) => void
+  openScanner: () => void
 }
 
-const ChatInterface = forwardRef<ChatInterfaceHandle>(function ChatInterface(_, ref) {
-  const [messages,    setMessages]    = useState<Message[]>([])
-  const [input,       setInput]       = useState('')
-  const [isStreaming, setIsStreaming] = useState(false)
-  const [activeTool,  setActiveTool]  = useState<string | undefined>()
-  const [pendingImage, setPendingImage] = useState<PendingImage | null>(null)
+interface ChatInterfaceProps {
+  onOpenScannerModal?: () => void
+}
 
-  const messagesEndRef = useRef<HTMLDivElement>(null)
-  const inputRef       = useRef<HTMLTextAreaElement>(null)
-  const fileInputRef   = useRef<HTMLInputElement>(null)
+const ChatInterface = forwardRef<ChatInterfaceHandle, ChatInterfaceProps>(function ChatInterface({ onOpenScannerModal }, ref) {
+  const [messages,     setMessages]     = useState<Message[]>([])
+  const [input,        setInput]        = useState('')
+  const [isStreaming,  setIsStreaming]  = useState(false)
+  const [activeTool,   setActiveTool]   = useState<string | undefined>()
+  const [pendingImage, setPendingImage] = useState<PendingImage | null>(null)
+  const [isListening,  setIsListening]  = useState(false)
+  const [voiceSupported, setVoiceSupported] = useState<boolean | null>(null)
+
+  const messagesEndRef    = useRef<HTMLDivElement>(null)
+  const inputRef          = useRef<HTMLTextAreaElement>(null)
+  const scanInputRef      = useRef<HTMLInputElement>(null)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const recognitionRef    = useRef<any>(null)
+  const voiceBaseRef      = useRef('')  // text in input when voice started
+
+  // ── Effects ────────────────────────────────────────────────────────────────
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
@@ -331,9 +507,20 @@ const ChatInterface = forwardRef<ChatInterfaceHandle>(function ChatInterface(_, 
     ta.style.height = Math.min(ta.scrollHeight, 160) + 'px'
   }, [input])
 
-  // ── Image selection ────────────────────────────────────────────────────────
+  // Check voice support + cleanup on unmount
+  useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const SR = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition
+    setVoiceSupported(!!SR)
+    return () => {
+      recognitionRef.current?.stop()
+      window.speechSynthesis?.cancel()
+    }
+  }, [])
 
-  function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+  // ── Camera scan capture ────────────────────────────────────────────────────
+
+  function handleScanCapture(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0]
     if (!file) return
     const reader = new FileReader()
@@ -341,10 +528,50 @@ const ChatInterface = forwardRef<ChatInterfaceHandle>(function ChatInterface(_, 
       const dataUrl = reader.result as string
       const [header, base64] = dataUrl.split(',')
       const mimeType = header.match(/:(.*?);/)?.[1] ?? 'image/jpeg'
-      setPendingImage({ base64, mimeType, preview: dataUrl })
+      setPendingImage({ base64, mimeType, preview: dataUrl, source: 'scan' })
     }
     reader.readAsDataURL(file)
-    e.target.value = ''  // reset so re-selecting same file works
+    e.target.value = ''
+  }
+
+  // ── Voice input ────────────────────────────────────────────────────────────
+
+  function toggleVoice() {
+    if (!voiceSupported) return
+
+    if (isListening) {
+      recognitionRef.current?.stop()
+      setIsListening(false)
+      return
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const SR = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const recognition = new SR() as any
+
+    recognition.continuous     = true
+    recognition.interimResults = true
+    recognition.lang           = 'en-US'
+
+    // Capture any text already typed before voice starts
+    voiceBaseRef.current = input.trim() ? input.trim() + ' ' : ''
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    recognition.onresult = (event: any) => {
+      let transcript = ''
+      for (let i = 0; i < event.results.length; i++) {
+        transcript += event.results[i][0].transcript
+      }
+      setInput(voiceBaseRef.current + transcript)
+    }
+
+    recognition.onend   = () => { setIsListening(false); recognitionRef.current = null }
+    recognition.onerror = () => { setIsListening(false); recognitionRef.current = null }
+
+    recognition.start()
+    recognitionRef.current = recognition
+    setIsListening(true)
   }
 
   // ── Send ───────────────────────────────────────────────────────────────────
@@ -352,6 +579,12 @@ const ChatInterface = forwardRef<ChatInterfaceHandle>(function ChatInterface(_, 
   async function sendMessage(text: string) {
     const hasContent = text.trim() || pendingImage
     if (!hasContent || isStreaming) return
+
+    // Stop voice if still listening
+    if (isListening) {
+      recognitionRef.current?.stop()
+      setIsListening(false)
+    }
 
     const capturedImage = pendingImage
     setPendingImage(null)
@@ -363,6 +596,7 @@ const ChatInterface = forwardRef<ChatInterfaceHandle>(function ChatInterface(_, 
       imagePreview: capturedImage?.preview,
       imageBase64:  capturedImage?.base64,
       imageMimeType: capturedImage?.mimeType,
+      imageSource:  capturedImage?.source,
     }
     const asstMsg: Message = { id: crypto.randomUUID(), role: 'assistant', content: '', toolCalls: [] }
 
@@ -372,7 +606,6 @@ const ChatInterface = forwardRef<ChatInterfaceHandle>(function ChatInterface(_, 
     setIsStreaming(true)
     setActiveTool(undefined)
 
-    // Build API-formatted messages (handles image content blocks for history)
     const apiMessages = history.map((m) => {
       if (m.imageBase64 && m.role === 'user') {
         return {
@@ -386,7 +619,7 @@ const ChatInterface = forwardRef<ChatInterfaceHandle>(function ChatInterface(_, 
                 data: m.imageBase64,
               },
             },
-            { type: 'text' as const, text: m.content || 'What do you see in this image?' },
+            { type: 'text' as const, text: m.content || 'Analyze this image.' },
           ],
         }
       }
@@ -395,9 +628,9 @@ const ChatInterface = forwardRef<ChatInterfaceHandle>(function ChatInterface(_, 
 
     try {
       const res = await fetch('/api/chat', {
-        method: 'POST',
+        method:  'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: apiMessages }),
+        body:    JSON.stringify({ messages: apiMessages }),
       })
       if (!res.ok || !res.body) throw new Error(`API error ${res.status}`)
 
@@ -450,10 +683,7 @@ const ChatInterface = forwardRef<ChatInterfaceHandle>(function ChatInterface(_, 
               const next = [...prev]
               const last = next[next.length - 1]
               if (last?.role === 'assistant')
-                next[next.length - 1] = {
-                  ...last,
-                  toolCalls: [...(last.toolCalls ?? []), finished],
-                }
+                next[next.length - 1] = { ...last, toolCalls: [...(last.toolCalls ?? []), finished] }
               return next
             })
           }
@@ -475,10 +705,7 @@ const ChatInterface = forwardRef<ChatInterfaceHandle>(function ChatInterface(_, 
         const next = [...prev]
         const last = next[next.length - 1]
         if (last?.role === 'assistant' && last.content === '')
-          next[next.length - 1] = {
-            ...last,
-            content: 'Connection error. Check your ANTHROPIC_API_KEY and try again.',
-          }
+          next[next.length - 1] = { ...last, content: 'Connection error. Check your ANTHROPIC_API_KEY and try again.' }
         return next
       })
     } finally {
@@ -492,8 +719,10 @@ const ChatInterface = forwardRef<ChatInterfaceHandle>(function ChatInterface(_, 
     if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(input) }
   }
 
-  // Expose sendMessage to parent via ref
-  useImperativeHandle(ref, () => ({ sendMessage }))
+  useImperativeHandle(ref, () => ({
+    sendMessage,
+    openScanner: () => scanInputRef.current?.click(),
+  }))
 
   const lastAsstId = [...messages].reverse().find((m) => m.role === 'assistant')?.id
   const canSend    = (!!input.trim() || !!pendingImage) && !isStreaming
@@ -518,28 +747,36 @@ const ChatInterface = forwardRef<ChatInterfaceHandle>(function ChatInterface(_, 
 
       {/* ── Input ────────────────────────────────────────────────────────── */}
       <div className="px-4 md:px-5 pt-2 pb-4">
-        {/* Hidden file input */}
+
+        {/* Camera capture input (capture="environment" → opens rear camera on mobile) */}
         <input
-          ref={fileInputRef}
+          ref={scanInputRef}
           type="file"
           accept="image/*"
+          capture="environment"
           className="hidden"
-          onChange={handleFileChange}
+          onChange={handleScanCapture}
         />
 
         <form
           onSubmit={handleSubmit}
           className="flex flex-col bg-[#141c24] border border-[#1e2b3a] rounded-xl px-4 py-3 focus-within:border-[#243040] transition-colors duration-100"
         >
-          {/* Image preview (shown above textarea when image is attached) */}
+          {/* Image preview */}
           {pendingImage && (
             <div className="relative mb-2 self-start">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={pendingImage.preview}
-                alt="Attached photo"
+                alt="Scan preview"
                 className="h-20 w-auto rounded-md border border-[#243040] object-cover"
               />
+              {pendingImage.source === 'scan' && (
+                <div className="absolute bottom-0 left-0 right-0 flex items-center justify-center gap-1 py-0.5 bg-[#0e1218]/70 rounded-b-md">
+                  <Camera size={8} className="text-[#8892a4]" />
+                  <span className="text-[9px] text-[#8892a4]">Scanned</span>
+                </div>
+              )}
               <button
                 type="button"
                 onClick={() => setPendingImage(null)}
@@ -551,35 +788,83 @@ const ChatInterface = forwardRef<ChatInterfaceHandle>(function ChatInterface(_, 
             </div>
           )}
 
-          {/* Textarea row */}
-          <div className="flex items-end gap-2">
-            {/* Attach photo button */}
+          {/* Input row */}
+          <div className="flex items-end gap-1.5">
+
+            {/* Scan button — opens Machine Scanner modal */}
             <button
               type="button"
-              onClick={() => fileInputRef.current?.click()}
+              onClick={() => onOpenScannerModal ? onOpenScannerModal() : scanInputRef.current?.click()}
               disabled={isStreaming}
-              className="flex-shrink-0 w-11 h-11 sm:w-7 sm:h-7 rounded-lg flex items-center justify-center border border-[#243040] text-[#4a5568] disabled:opacity-30 hover:text-[#8892a4] hover:border-[#2d3f52] active:text-[#f0f4f8] transition-colors duration-100 touch-manipulation"
-              aria-label="Attach photo"
+              title="Scan weld or component"
+              className="flex-shrink-0 w-11 h-11 sm:w-8 sm:h-8 rounded-lg flex items-center justify-center
+                border border-[#243040] text-[#4a5568]
+                disabled:opacity-30
+                hover:text-[#f0f4f8] hover:border-[#2d3f52]
+                active:text-[#f0f4f8] active:bg-[#1a2332]
+                transition-colors duration-100 touch-manipulation"
+              aria-label="Scan weld or component"
             >
-              <Paperclip size={13} />
+              <Scan size={13} />
             </button>
+
+            {/* Voice button */}
+            <div className="relative flex-shrink-0">
+              <button
+                type="button"
+                onClick={toggleVoice}
+                disabled={isStreaming || voiceSupported === false}
+                title={
+                  voiceSupported === false
+                    ? 'Voice not supported in this browser'
+                    : isListening ? 'Stop listening' : 'Start voice input'
+                }
+                className={`
+                  w-11 h-11 sm:w-8 sm:h-8 rounded-lg flex items-center justify-center
+                  border transition-colors duration-100 touch-manipulation
+                  disabled:opacity-30 disabled:cursor-not-allowed
+                  ${isListening
+                    ? 'bg-[#1a2332] border-[#2d3f52] text-[#f0f4f8] animate-pulse'
+                    : 'border-[#243040] text-[#4a5568] hover:text-[#f0f4f8] hover:border-[#2d3f52] active:bg-[#1a2332]'
+                  }
+                `}
+                aria-label={isListening ? 'Stop listening' : 'Start voice input'}
+                aria-pressed={isListening}
+              >
+                <Mic size={13} />
+              </button>
+            </div>
 
             <textarea
               ref={inputRef}
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyDown}
-              placeholder="Ask about specs, setup, or upload a weld photo..."
+              placeholder={
+                isListening
+                  ? 'Listening...'
+                  : 'Ask a question or scan a weld photo...'
+              }
               rows={1}
               disabled={isStreaming}
-              className="flex-1 bg-transparent resize-none outline-none text-base sm:text-[13px] text-[#f0f4f8] placeholder-[#4a5568] leading-relaxed max-h-40"
+              className={`
+                flex-1 bg-transparent resize-none outline-none
+                text-base sm:text-[13px] leading-relaxed max-h-40
+                text-[#f0f4f8] placeholder-[#4a5568]
+                ${isListening ? 'placeholder-[#8892a4]' : ''}
+              `}
             />
 
             {/* Send button */}
             <button
               type="submit"
               disabled={!canSend}
-              className="flex-shrink-0 w-11 h-11 sm:w-7 sm:h-7 rounded-lg flex items-center justify-center bg-[#1a2332] border border-[#243040] text-[#f0f4f8] disabled:opacity-25 disabled:cursor-not-allowed hover:bg-[#243040] hover:border-[#2d3f52] active:bg-[#243040] transition-colors duration-100 touch-manipulation"
+              className="flex-shrink-0 w-11 h-11 sm:w-8 sm:h-8 rounded-lg flex items-center justify-center
+                bg-[#1a2332] border border-[#243040] text-[#f0f4f8]
+                disabled:opacity-25 disabled:cursor-not-allowed
+                hover:bg-[#243040] hover:border-[#2d3f52]
+                active:bg-[#243040]
+                transition-colors duration-100 touch-manipulation"
             >
               {isStreaming
                 ? <span className="w-3 h-3 rounded-full border border-[#243040] border-t-[#f0f4f8] animate-spin" />
@@ -591,17 +876,21 @@ const ChatInterface = forwardRef<ChatInterfaceHandle>(function ChatInterface(_, 
 
         <div className="flex items-center justify-between mt-2 px-1">
           <span className="text-[10px] text-[#2d3f52] hidden sm:inline">Enter to send · Shift+Enter for new line</span>
-          <span className="text-[10px] text-[#2d3f52] sm:hidden">Tap ↑ to send</span>
+          <span className="text-[10px] text-[#2d3f52] sm:hidden">
+            {isListening ? <span className="text-[#8892a4] animate-pulse">Listening...</span> : 'Tap ↑ to send'}
+          </span>
           <span className="text-[10px] text-[#2d3f52]">
             {isStreaming
               ? <span className="text-[#4a5568]">{activeTool ? `Running ${activeTool}...` : 'Generating...'}</span>
-              : '5 tools · vision enabled'
+              : isListening
+                ? <span className="text-[#8892a4]">Voice active</span>
+                : '5 tools · scanner · voice'
             }
           </span>
         </div>
       </div>
 
-      {/* iOS home-indicator spacer — fills env(safe-area-inset-bottom) below input */}
+      {/* iOS home-indicator spacer */}
       <div className="flex-shrink-0 bg-[#0e1218]" style={{ height: 'env(safe-area-inset-bottom)' }} />
     </div>
   )

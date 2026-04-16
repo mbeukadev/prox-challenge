@@ -38,9 +38,20 @@ body {
   border: 1px solid #243040;
   padding: 0.1rem 0.35rem;
   border-radius: 4px;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
   font-size: 0.8em;
-  color: #5eead4;
+  color: #c4cdd8;
+}
+.message-content hr {
+  border: none;
+  border-top: 1px solid #1e2b3a;
+  margin: 0.75rem 0;
+}
+.message-content ol {
+  list-style-type: decimal;
+}
+.message-content ul {
+  list-style-type: disc;
 }
 .message-content pre {
   background: #0e1218;

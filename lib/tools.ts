@@ -1,5 +1,5 @@
 import type { Tool } from '@anthropic-ai/sdk/resources/messages'
-import { lookupSpecs, getProcedure, troubleshoot, getImage, generateArtifact } from './knowledge'
+import { lookupSpecs, getProcedure, troubleshoot, getImage, generateArtifact, showComponent } from './knowledge'
 
 export const TOOL_DEFINITIONS: Tool[] = [
   {
@@ -59,6 +59,34 @@ export const TOOL_DEFINITIONS: Tool[] = [
   },
 
   {
+    name: 'show_component',
+    description:
+      'Open the interactive Machine Explorer diagram and highlight a specific component. Use this whenever the user asks WHERE something is located on the machine — power switch, gun socket, polarity terminals, LCD display, wire spool, drive rolls, etc. Always call this alongside any text explanation about physical component location.',
+    input_schema: {
+      type: 'object',
+      properties: {
+        component: {
+          type: 'string',
+          enum: [
+            'lcd_display','home_button','back_button','control_knob',
+            'left_knob','right_knob','power_switch','gun_socket',
+            'gas_outlet','storage','positive_socket','negative_socket',
+            'wire_feed_cable','settings_chart','wire_spool','drive_rolls',
+            'tension_knob','wire_liner',
+          ],
+          description: 'The component to highlight on the diagram',
+        },
+        tab: {
+          type: 'string',
+          enum: ['front_panel', 'interior'],
+          description: 'Which diagram view to show. front_panel for controls/ports, interior for wire feed/spool components.',
+        },
+      },
+      required: ['component'],
+    },
+  },
+
+  {
     name: 'generate_artifact',
     description:
       'Generate an interactive visual component for the user. Call this AFTER answering with text when the answer would benefit from an interactive tool. Rules: (1) After any duty cycle question → duty_cycle_calculator. (2) After any polarity/cable setup question → polarity_configurator. (3) After troubleshoot results with 3+ causes → troubleshooting_checklist. Do NOT call this for simple yes/no answers.',
@@ -107,6 +135,7 @@ export function executeTool(name: string, input: Record<string, any>): Record<st
       case 'get_procedure':    return getProcedure(input.process, input.section)
       case 'troubleshoot':     return troubleshoot(input.symptom, input.process)
       case 'get_image':        return getImage(input.image_id)
+      case 'show_component':   return showComponent(input.component as string, input.tab as string | undefined)
       case 'generate_artifact':return generateArtifact(input.artifact_type as string, input)
       default:                 return { error: `Unknown tool: ${name}` }
     }

@@ -3,6 +3,9 @@
 import { useState, useRef } from 'react'
 import ChatInterface, { type ChatInterfaceHandle } from './components/ChatInterface'
 import ManualGallery from './components/ManualGallery'
+import { MachineExplorerPage } from './components/MachineExplorer'
+import MachineScannerModal from './components/MachineScannerModal'
+import SettingsModal from './components/SettingsModal'
 import {
   MessageSquare,
   Gauge,
@@ -15,6 +18,8 @@ import {
   ChevronRight,
   Menu,
   X,
+  Scan,
+  Cpu,
 } from 'lucide-react'
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -94,15 +99,19 @@ function ProcessRow({ name, polarity, note }: { name: string; polarity: string; 
 // View type
 // ─────────────────────────────────────────────────────────────────────────────
 
-type View = 'chat' | 'gallery'
+type View = 'chat' | 'gallery' | 'explorer'
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Page
 // ─────────────────────────────────────────────────────────────────────────────
 
 export default function Home() {
-  const [sidebarOpen, setSidebarOpen] = useState(false)
-  const [view,        setView]        = useState<View>('chat')
+  const [sidebarOpen,  setSidebarOpen]  = useState(false)
+  const [view,         setView]         = useState<View>('chat')
+  const [scannerOpen,  setScannerOpen]  = useState(false)
+  const [settingsOpen, setSettingsOpen] = useState(false)
+
+  const isExplorer = view === 'explorer'
   const chatRef = useRef<ChatInterfaceHandle>(null)
 
   // Close sidebar, switch to chat, and send a preset message
@@ -193,6 +202,11 @@ export default function Home() {
             label="Safety"
             onClick={() => sendPreset('What are the safety warnings I need to know before welding?')}
           />
+          <NavItem
+            icon={<Scan size={14} />}
+            label="Machine Scanner"
+            onClick={() => { setSidebarOpen(false); setScannerOpen(true) }}
+          />
 
           <NavSection label="Processes" />
           <ProcessRow name="MIG"       polarity="DCEP" note="Gas required" />
@@ -204,12 +218,23 @@ export default function Home() {
         {/* Bottom nav */}
         <div className="pb-4 border-t border-[#1e2b3a] pt-3">
           <NavItem
+            icon={<Cpu size={14} />}
+            label="Machine Explorer"
+            active={isExplorer}
+            onClick={() => { setSidebarOpen(false); setView('explorer') }}
+          />
+          <NavItem
             icon={<BookOpen size={14} />}
             label="Manual Pages"
             active={isGallery}
             onClick={openGallery}
           />
-          <NavItem icon={<Settings size={14} />} label="Settings" muted />
+          <NavItem
+            icon={<Settings size={14} />}
+            label="Settings"
+            muted
+            onClick={() => { setSidebarOpen(false); setSettingsOpen(true) }}
+          />
         </div>
       </aside>
 
@@ -241,7 +266,7 @@ export default function Home() {
             </div>
 
             <h1 className="text-[15px] font-semibold text-[#f0f4f8] tracking-[-0.01em] hidden md:block">
-              {isGallery ? 'Manual Pages' : 'Welding Assistant'}
+              {isGallery ? 'Manual Pages' : isExplorer ? 'Machine Explorer' : 'Welding Assistant'}
             </h1>
 
             <div className="hidden md:flex items-center gap-1.5">
@@ -257,7 +282,7 @@ export default function Home() {
           <div className="flex items-center gap-2">
             <span className="inline-flex items-center gap-1.5 text-[11px] text-[#4a5568]">
               <span className="w-1.5 h-1.5 rounded-full bg-[#22c55e] opacity-80" />
-              <span className="hidden sm:inline">claude-haiku-4-5</span>
+              <span className="hidden sm:inline">claude-sonnet-4-6</span>
             </span>
           </div>
         </header>
@@ -266,10 +291,23 @@ export default function Home() {
         <div className="flex-1 overflow-hidden">
           {isGallery
             ? <ManualGallery onClose={() => setView('chat')} />
-            : <ChatInterface ref={chatRef} />
+            : isExplorer
+              ? <MachineExplorerPage onClose={() => setView('chat')} />
+              : <ChatInterface ref={chatRef} onOpenScannerModal={() => setScannerOpen(true)} />
           }
         </div>
       </main>
+
+      {/* ── Modals ───────────────────────────────────────────────────────── */}
+      {scannerOpen && (
+        <MachineScannerModal
+          onClose={() => setScannerOpen(false)}
+          onLaunch={() => chatRef.current?.openScanner()}
+        />
+      )}
+      {settingsOpen && (
+        <SettingsModal onClose={() => setSettingsOpen(false)} />
+      )}
     </div>
   )
 }

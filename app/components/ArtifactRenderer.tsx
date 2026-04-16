@@ -3,9 +3,10 @@
 import dynamic from 'next/dynamic'
 
 // Lazy-load heavy artifact components so they don't bloat the initial bundle
-const DutyCycleCalculator    = dynamic(() => import('./artifacts/DutyCycleCalculator'))
-const PolarityConfigurator   = dynamic(() => import('./artifacts/PolarityConfigurator'))
+const DutyCycleCalculator      = dynamic(() => import('./artifacts/DutyCycleCalculator'))
+const PolarityConfigurator     = dynamic(() => import('./artifacts/PolarityConfigurator'))
 const TroubleshootingChecklist = dynamic(() => import('./artifacts/TroubleshootingChecklist'))
+const MachineExplorer          = dynamic(() => import('./MachineExplorer'))
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Types
@@ -17,6 +18,8 @@ export interface ArtifactResult {
   title?: string
   initialProcess?: string
   initialVoltage?: string
+  tab?: string
+  highlight?: string
   data?: Record<string, unknown>
 }
 
@@ -48,6 +51,15 @@ export default function ArtifactRenderer({ artifact }: { artifact: ArtifactResul
         <TroubleshootingChecklist
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           data={(artifact.data as any) ?? {}}
+        />
+      )
+
+    case 'machine_explorer':
+      return (
+        <MachineExplorer
+          highlight={artifact.highlight}
+          initialTab={artifact.tab as 'front_panel' | 'interior' | undefined}
+          inline={true}
         />
       )
 

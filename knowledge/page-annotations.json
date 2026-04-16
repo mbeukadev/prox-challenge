@@ -1,0 +1,359 @@
+{
+  "quick-start-page-1.png": {
+    "file": "quick-start-page-1.png",
+    "label": "Quick Start Guide (1)",
+    "summary": "Manual page: Quick Start Guide (1)",
+    "regions": [],
+    "warnings": [],
+    "key_numbers": {},
+    "spatial_guide": "Could not extract spatial information."
+  },
+  "quick-start-page-2.png": {
+    "file": "quick-start-page-2.png",
+    "label": "Quick Start Guide (2)",
+    "summary": "Manual page: Quick Start Guide (2)",
+    "regions": [],
+    "warnings": [],
+    "key_numbers": {},
+    "spatial_guide": "Could not extract spatial information."
+  },
+  "selection-chart.png": {
+    "file": "selection-chart.png",
+    "label": "Process Selection Chart",
+    "summary": "Manual page: Process Selection Chart",
+    "regions": [],
+    "warnings": [],
+    "key_numbers": {},
+    "spatial_guide": "Could not extract spatial information."
+  },
+  "page-07-specs.png": {
+    "file": "page-07-specs.png",
+    "page": 7,
+    "label": "Specifications",
+    "summary": "Manual page: Specifications",
+    "regions": [],
+    "warnings": [],
+    "key_numbers": {},
+    "spatial_guide": "Could not extract spatial information."
+  },
+  "page-08-front-panel-controls.png": {
+    "file": "page-08-front-panel-controls.png",
+    "page": 8,
+    "label": "Front Panel Controls",
+    "summary": "Manual page: Front Panel Controls",
+    "regions": [],
+    "warnings": [],
+    "key_numbers": {},
+    "spatial_guide": "Could not extract spatial information."
+  },
+  "page-09-interior-controls.png": {
+    "file": "page-09-interior-controls.png",
+    "page": 9,
+    "label": "Interior Controls",
+    "summary": "Manual page: Interior Controls",
+    "regions": [],
+    "warnings": [],
+    "key_numbers": {},
+    "spatial_guide": "Could not extract spatial information."
+  },
+  "page-10-wire-spool-setup.png": {
+    "file": "page-10-wire-spool-setup.png",
+    "page": 10,
+    "label": "Wire Spool Setup",
+    "summary": "Manual page: Wire Spool Setup",
+    "regions": [],
+    "warnings": [],
+    "key_numbers": {},
+    "spatial_guide": "Could not extract spatial information."
+  },
+  "page-12-feed-roller.png": {
+    "file": "page-12-feed-roller.png",
+    "page": 12,
+    "label": "Feed Roller Types",
+    "summary": "Manual page: Feed Roller Types",
+    "regions": [],
+    "warnings": [],
+    "key_numbers": {},
+    "spatial_guide": "Could not extract spatial information."
+  },
+  "page-13-dcen-flux-polarity.png": {
+    "file": "page-13-dcen-flux-polarity.png",
+    "page": 13,
+    "label": "DCEN Polarity (Flux-Cored)",
+    "summary": "Manual page: DCEN Polarity (Flux-Cored)",
+    "regions": [],
+    "warnings": [],
+    "key_numbers": {},
+    "spatial_guide": "Could not extract spatial information."
+  },
+  "page-14-dcep-mig-polarity-gas.png": {
+    "file": "page-14-dcep-mig-polarity-gas.png",
+    "page": 14,
+    "label": "DCEP Polarity + Gas (MIG)",
+    "summary": "Manual page: DCEP Polarity + Gas (MIG)",
+    "regions": [],
+    "warnings": [],
+    "key_numbers": {},
+    "spatial_guide": "Could not extract spatial information."
+  },
+  "page-15-wire-threading.png": {
+    "file": "page-15-wire-threading.png",
+    "page": 15,
+    "label": "Wire Threading",
+    "summary": "Manual page: Wire Threading",
+    "regions": [],
+    "warnings": [],
+    "key_numbers": {},
+    "spatial_guide": "Could not extract spatial information."
+  },
+  "page-18-basic-wire-welding.png": {
+    "file": "page-18-basic-wire-welding.png",
+    "page": 18,
+    "label": "Basic Wire Welding",
+    "summary": "Manual page: Basic Wire Welding",
+    "regions": [],
+    "warnings": [],
+    "key_numbers": {},
+    "spatial_guide": "Could not extract spatial information."
+  },
+  "page-19-duty-cycle-mig.png": {
+    "file": "page-19-duty-cycle-mig.png",
+    "page": 19,
+    "label": "Duty Cycle — MIG",
+    "summary": "Manual page: Duty Cycle — MIG",
+    "regions": [],
+    "warnings": [],
+    "key_numbers": {},
+    "spatial_guide": "Could not extract spatial information."
+  },
+  "page-20-settings-lcd.png": {
+    "file": "page-20-settings-lcd.png",
+    "page": 20,
+    "label": "Settings LCD Display",
+    "summary": "Manual page: Settings LCD Display",
+    "regions": [],
+    "warnings": [],
+    "key_numbers": {},
+    "spatial_guide": "Could not extract spatial information."
+  },
+  "page-21-optional-settings.png": {
+    "file": "page-21-optional-settings.png",
+    "page": 21,
+    "label": "Optional Settings",
+    "summary": "Manual page: Optional Settings",
+    "regions": [],
+    "warnings": [],
+    "key_numbers": {},
+    "spatial_guide": "Could not extract spatial information."
+  },
+  "page-22-welding-angles-technique.png": {
+    "file": "page-22-welding-angles-technique.png",
+    "page": 22,
+    "label": "Welding Angles & Technique",
+    "summary": "Manual page: Welding Angles & Technique",
+    "regions": [],
+    "warnings": [],
+    "key_numbers": {},
+    "spatial_guide": "Could not extract spatial information."
+  },
+  "page-24-tig-setup-cables.png": {
+    "file": "page-24-tig-setup-cables.png",
+    "page": 24,
+    "label": "TIG Cable Setup",
+    "summary": "Manual page: TIG Cable Setup",
+    "regions": [],
+    "warnings": [],
+    "key_numbers": {},
+    "spatial_guide": "Could not extract spatial information."
+  },
+  "page-25-tig-gas-setup.png": {
+    "file": "page-25-tig-gas-setup.png",
+    "page": 25,
+    "label": "TIG Gas Setup",
+    "summary": "Manual page: TIG Gas Setup",
+    "regions": [],
+    "warnings": [],
+    "key_numbers": {},
+    "spatial_guide": "Could not extract spatial information."
+  },
+  "page-26-tig-torch-assembly-grinding.png": {
+    "file": "page-26-tig-torch-assembly-grinding.png",
+    "page": 26,
+    "label": "TIG Torch Assembly & Grinding",
+    "summary": "Manual page: TIG Torch Assembly & Grinding",
+    "regions": [],
+    "warnings": [],
+    "key_numbers": {},
+    "spatial_guide": "Could not extract spatial information."
+  },
+  "page-27-stick-setup-cables.png": {
+    "file": "page-27-stick-setup-cables.png",
+    "page": 27,
+    "label": "Stick Cable Setup",
+    "summary": "Manual page: Stick Cable Setup",
+    "regions": [],
+    "warnings": [],
+    "key_numbers": {},
+    "spatial_guide": "Could not extract spatial information."
+  },
+  "page-29-duty-cycle-tig-stick.png": {
+    "file": "page-29-duty-cycle-tig-stick.png",
+    "page": 29,
+    "label": "Duty Cycle — TIG & Stick",
+    "summary": "Manual page: Duty Cycle — TIG & Stick",
+    "regions": [],
+    "warnings": [],
+    "key_numbers": {},
+    "spatial_guide": "Could not extract spatial information."
+  },
+  "page-30-tig-welding-settings.png": {
+    "file": "page-30-tig-welding-settings.png",
+    "page": 30,
+    "label": "TIG Welding Settings",
+    "summary": "Manual page: TIG Welding Settings",
+    "regions": [],
+    "warnings": [],
+    "key_numbers": {},
+    "spatial_guide": "Could not extract spatial information."
+  },
+  "page-32-stick-welding-settings.png": {
+    "file": "page-32-stick-welding-settings.png",
+    "page": 32,
+    "label": "Stick Welding Settings",
+    "summary": "Manual page: Stick Welding Settings",
+    "regions": [],
+    "warnings": [],
+    "key_numbers": {},
+    "spatial_guide": "Could not extract spatial information."
+  },
+  "page-35-weld-diagnosis-wire.png": {
+    "file": "page-35-weld-diagnosis-wire.png",
+    "page": 35,
+    "label": "Weld Diagnosis — Wire",
+    "summary": "Manual page: Weld Diagnosis — Wire",
+    "regions": [],
+    "warnings": [],
+    "key_numbers": {},
+    "spatial_guide": "Could not extract spatial information."
+  },
+  "page-36-wire-penetration.png": {
+    "file": "page-36-wire-penetration.png",
+    "page": 36,
+    "label": "Wire Penetration Guide",
+    "summary": "Manual page: Wire Penetration Guide",
+    "regions": [],
+    "warnings": [],
+    "key_numbers": {},
+    "spatial_guide": "Could not extract spatial information."
+  },
+  "page-37-wire-porosity-spatter.png": {
+    "file": "page-37-wire-porosity-spatter.png",
+    "page": 37,
+    "label": "Wire Porosity & Spatter",
+    "summary": "Manual page: Wire Porosity & Spatter",
+    "regions": [],
+    "warnings": [],
+    "key_numbers": {},
+    "spatial_guide": "Could not extract spatial information."
+  },
+  "page-38-weld-diagnosis-stick.png": {
+    "file": "page-38-weld-diagnosis-stick.png",
+    "page": 38,
+    "label": "Weld Diagnosis — Stick",
+    "summary": "Manual page: Weld Diagnosis — Stick",
+    "regions": [],
+    "warnings": [],
+    "key_numbers": {},
+    "spatial_guide": "Could not extract spatial information."
+  },
+  "page-39-stick-penetration.png": {
+    "file": "page-39-stick-penetration.png",
+    "page": 39,
+    "label": "Stick Penetration Guide",
+    "summary": "Manual page: Stick Penetration Guide",
+    "regions": [],
+    "warnings": [],
+    "key_numbers": {},
+    "spatial_guide": "Could not extract spatial information."
+  },
+  "page-40-stick-porosity-spatter.png": {
+    "file": "page-40-stick-porosity-spatter.png",
+    "page": 40,
+    "label": "Stick Porosity & Spatter",
+    "summary": "Manual page: Stick Porosity & Spatter",
+    "regions": [],
+    "warnings": [],
+    "key_numbers": {},
+    "spatial_guide": "Could not extract spatial information."
+  },
+  "page-41-maintenance.png": {
+    "file": "page-41-maintenance.png",
+    "page": 41,
+    "label": "Maintenance",
+    "summary": "Manual page: Maintenance",
+    "regions": [],
+    "warnings": [],
+    "key_numbers": {},
+    "spatial_guide": "Could not extract spatial information."
+  },
+  "page-42-troubleshoot-wire-1.png": {
+    "file": "page-42-troubleshoot-wire-1.png",
+    "page": 42,
+    "label": "Troubleshooting — Wire (1)",
+    "summary": "Manual page: Troubleshooting — Wire (1)",
+    "regions": [],
+    "warnings": [],
+    "key_numbers": {},
+    "spatial_guide": "Could not extract spatial information."
+  },
+  "page-43-troubleshoot-wire-2.png": {
+    "file": "page-43-troubleshoot-wire-2.png",
+    "page": 43,
+    "label": "Troubleshooting — Wire (2)",
+    "summary": "Manual page: Troubleshooting — Wire (2)",
+    "regions": [],
+    "warnings": [],
+    "key_numbers": {},
+    "spatial_guide": "Could not extract spatial information."
+  },
+  "page-44-troubleshoot-tig-stick.png": {
+    "file": "page-44-troubleshoot-tig-stick.png",
+    "page": 44,
+    "label": "Troubleshooting — TIG & Stick",
+    "summary": "Manual page: Troubleshooting — TIG & Stick",
+    "regions": [],
+    "warnings": [],
+    "key_numbers": {},
+    "spatial_guide": "Could not extract spatial information."
+  },
+  "page-45-wiring-schematic.png": {
+    "file": "page-45-wiring-schematic.png",
+    "page": 45,
+    "label": "Wiring Schematic",
+    "summary": "Manual page: Wiring Schematic",
+    "regions": [],
+    "warnings": [],
+    "key_numbers": {},
+    "spatial_guide": "Could not extract spatial information."
+  },
+  "page-46-parts-list.png": {
+    "file": "page-46-parts-list.png",
+    "page": 46,
+    "label": "Parts List",
+    "summary": "Manual page: Parts List",
+    "regions": [],
+    "warnings": [],
+    "key_numbers": {},
+    "spatial_guide": "Could not extract spatial information."
+  },
+  "page-47-assembly-diagram.png": {
+    "file": "page-47-assembly-diagram.png",
+    "page": 47,
+    "label": "Assembly Diagram",
+    "summary": "Manual page: Assembly Diagram",
+    "regions": [],
+    "warnings": [],
+    "key_numbers": {},
+    "spatial_guide": "Could not extract spatial information."
+  }
+}
