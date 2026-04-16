@@ -138,6 +138,25 @@ Requires Node 18+. Model: `claude-sonnet-4-6`.
 
 ---
 
+## Mobile Installation
+
+Prox installs as a native-feeling app directly from the browser — no App Store, no download.
+
+**iPhone (Safari)**
+1. Open the Vercel URL in Safari
+2. Tap the **Share** button (box with arrow, bottom center)
+3. Tap **Add to Home Screen**
+4. Tap **Add**
+
+**Android (Chrome)**
+1. Open the URL in Chrome
+2. Tap the **three-dot menu** (top right)
+3. Tap **Add to Home Screen**
+
+Once installed, the app launches fullscreen with no browser chrome — just the interface. It works on any network including 4G and 5G. Camera scanning (live viewfinder, real-time component identification) and voice input both work over mobile data without any WiFi requirement.
+
+---
+
 ## Deployment
 
 ### Vercel
