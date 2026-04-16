@@ -31,7 +31,7 @@ function ProxLogo() {
     <div className="flex items-center px-5 py-4 select-none">
       {/* Full prox wordmark — logo includes the text, no separate span needed */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src="/proxlogo.png" alt="prox" style={{ height: '34px', width: 'auto' }} />
+      <img src="/proxlogo.png" alt="prox" style={{ height: '80px', width: 'auto' }} />
     </div>
   )
 }
