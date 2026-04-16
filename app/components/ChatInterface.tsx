@@ -358,11 +358,9 @@ function MessageBubble({
   return (
     <div className="flex gap-3 items-start">
       {/* Avatar */}
-      <div className="flex-shrink-0 w-6 h-6 rounded bg-[#1a2332] border border-[#243040] flex items-center justify-center mt-0.5">
-        <svg width="10" height="10" viewBox="0 0 20 20" fill="none">
-          <path d="M1 2 L10 7 L17 4 L15 8 L19 10 L15 14 L10 18 L6 14 Z"
-            fill="#f0f4f8" fillOpacity="0.7" />
-        </svg>
+      <div className="flex-shrink-0 w-6 h-6 rounded bg-[#1a2332] border border-[#243040] flex items-center justify-center mt-0.5 overflow-hidden p-1">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/vulcanlogo.png" alt="Vulcan" className="w-full h-full object-contain" />
       </div>
 
       <div className="flex-1 min-w-0 flex flex-col gap-2">
@@ -464,11 +462,9 @@ function EmptyState({ onSelect }: { onSelect: (p: string) => void }) {
   return (
     <div className="flex flex-col items-center justify-center h-full px-5 sm:px-6 py-8">
       {/* ── Wordmark ── */}
-      <div className="flex items-center gap-2.5 mb-2">
-        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-          <path d="M1 2 L10 7 L17 4 L15 8 L19 10 L15 14 L10 18 L6 14 Z"
-            fill="#f0f4f8" fillOpacity="0.7" />
-        </svg>
+      <div className="flex items-center gap-3 mb-2">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/vulcanlogo.png" alt="Vulcan" style={{ height: '22px', width: 'auto' }} />
         <span className="text-[17px] font-medium text-[#f0f4f8] tracking-[-0.01em]">
           Vulcan OmniPro 220
         </span>

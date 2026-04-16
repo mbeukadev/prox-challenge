@@ -28,14 +28,9 @@ import {
 
 function ProxLogo() {
   return (
-    <div className="flex items-center gap-2.5 px-5 py-4 select-none">
-      <svg width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-        <path
-          d="M1 2 L10 7 L17 4 L15 8 L19 10 L15 14 L10 18 L6 14 Z"
-          fill="#f0f4f8"
-          fillOpacity="0.92"
-        />
-      </svg>
+    <div className="flex items-center gap-3 px-5 py-4 select-none">
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src="/vulcanlogo.png" alt="Vulcan" style={{ height: '18px', width: 'auto' }} />
       <span className="text-[15px] font-medium tracking-[-0.01em] text-[#f0f4f8]">prox</span>
     </div>
   )
@@ -257,11 +252,9 @@ export default function Home() {
             </button>
 
             {/* Logo on mobile */}
-            <div className="flex items-center gap-2 md:hidden">
-              <svg width="16" height="16" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-                <path d="M1 2 L10 7 L17 4 L15 8 L19 10 L15 14 L10 18 L6 14 Z"
-                  fill="#f0f4f8" fillOpacity="0.9" />
-              </svg>
+            <div className="flex items-center gap-2.5 md:hidden">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/vulcanlogo.png" alt="Vulcan" style={{ height: '16px', width: 'auto' }} />
               <span className="text-[14px] font-medium text-[#f0f4f8] tracking-[-0.01em]">prox</span>
             </div>
 
