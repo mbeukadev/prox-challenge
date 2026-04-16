@@ -11,11 +11,42 @@ interface MachineScannerModalProps {
 }
 
 export default function MachineScannerModal({ onClose, onCapture }: MachineScannerModalProps) {
-  const [phase, setPhase] = useState<Phase>('permission')
-  const [flash, setFlash] = useState(false)
+  const [phase,  setPhase]  = useState<Phase>('permission')
+  const [flash,  setFlash]  = useState(false)
+  const [offset, setOffset] = useState({ x: 0, y: 0 })
 
-  const videoRef  = useRef<HTMLVideoElement>(null)
-  const streamRef = useRef<MediaStream | null>(null)
+  const videoRef     = useRef<HTMLVideoElement>(null)
+  const streamRef    = useRef<MediaStream | null>(null)
+  const heroRef      = useRef<HTMLDivElement>(null)
+  const animFrameRef = useRef<number>(0)
+  const targetRef    = useRef({ x: 0, y: 0 })
+  const currentRef   = useRef({ x: 0, y: 0 })
+
+  // Smooth parallax loop — lerp current toward target at 8% per frame
+  useEffect(() => {
+    function tick() {
+      const t = targetRef.current
+      const c = currentRef.current
+      c.x += (t.x - c.x) * 0.08
+      c.y += (t.y - c.y) * 0.08
+      setOffset({ x: c.x, y: c.y })
+      animFrameRef.current = requestAnimationFrame(tick)
+    }
+    animFrameRef.current = requestAnimationFrame(tick)
+    return () => cancelAnimationFrame(animFrameRef.current)
+  }, [])
+
+  function handleMouseMove(e: React.MouseEvent<HTMLDivElement>) {
+    const rect = heroRef.current?.getBoundingClientRect()
+    if (!rect) return
+    const dx = (e.clientX - rect.left - rect.width  / 2) / rect.width   // -0.5 → 0.5
+    const dy = (e.clientY - rect.top  - rect.height / 2) / rect.height
+    targetRef.current = { x: dx * -28, y: dy * -18 }
+  }
+
+  function handleMouseLeave() {
+    targetRef.current = { x: 0, y: 0 }
+  }
 
   // Escape key
   useEffect(() => {
@@ -94,14 +125,25 @@ export default function MachineScannerModal({ onClose, onCapture }: MachineScann
         {phase === 'permission' && (
           <>
             {/* Decorative viewfinder header */}
-            <div className="relative bg-[#080b0f] flex items-center justify-center" style={{ aspectRatio: '4/3' }}>
-              {/* Duty cycle chart zoomed way in — pure graph lines/bars, no brand text */}
+            <div
+              ref={heroRef}
+              onMouseMove={handleMouseMove}
+              onMouseLeave={handleMouseLeave}
+              className="relative bg-[#060a0d] flex items-center justify-center overflow-hidden"
+              style={{ aspectRatio: '4/3' }}
+            >
+              {/* Real product photo — zoomed to control panel, moves with cursor */}
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src="/manual-pages/page-19-duty-cycle-mig.png"
+                src="/product.webp"
                 alt=""
-                className="absolute inset-0 w-full h-full object-cover opacity-25"
-                style={{ transform: 'scale(3.2)', transformOrigin: '50% 60%', filter: 'grayscale(20%) contrast(1.15)' }}
+                className="absolute inset-0 w-full h-full object-cover opacity-60"
+                style={{
+                  transform: `scale(2.4) translate(${offset.x}px, ${offset.y}px)`,
+                  transformOrigin: '62% 52%',
+                  filter: 'grayscale(15%) contrast(1.08) brightness(0.85)',
+                  willChange: 'transform',
+                }}
               />
 
               {/* Viewfinder SVG */}
