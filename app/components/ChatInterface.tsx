@@ -127,74 +127,130 @@ function ToolBadge({ call, loading }: { call: ToolCall; loading?: boolean }) {
 // Markdown renderer
 // ─────────────────────────────────────────────────────────────────────────────
 
-function renderMarkdown(text: string): string {
-  // Strip emojis entirely
-  const noEmoji = text.replace(
-    /[\u{1F000}-\u{1FFFF}]|[\u{2600}-\u{27BF}]|[\u{FE00}-\u{FE0F}]|[\u{1F900}-\u{1F9FF}]|\u{200D}|\u{FE0F}/gu,
-    '',
-  ).replace(/\s{2,}/g, ' ')  // collapse double-spaces left by stripped emojis
-
-  const lines = noEmoji.split('\n')
-  const out: string[] = []
-  let inUl = false
-  let inOl = false
-
-  function closeList() {
-    if (inUl) { out.push('</ul>'); inUl = false }
-    if (inOl) { out.push('</ol>'); inOl = false }
-  }
-
-  for (const raw of lines) {
-    const line = raw.trim()
-
-    // Horizontal rule
-    if (/^---+$/.test(line)) { closeList(); out.push('<hr />'); continue }
-
-    // ### / ## / # headers → styled span, not a heavy heading
-    const hMatch = line.match(/^#{1,3} (.+)$/)
-    if (hMatch) {
-      closeList()
-      const level = line.match(/^(#+)/)?.[1].length ?? 1
-      const size  = level === 1 ? 'text-[13px]' : 'text-[12px]'
-      out.push(`<p class="mt-3 mb-1 ${size} font-semibold text-[#f0f4f8]">${inline(hMatch[1])}</p>`)
-      continue
-    }
-
-    // Unordered list
-    const ulMatch = line.match(/^[-*] (.+)$/)
-    if (ulMatch) {
-      if (!inUl) { if (inOl) { out.push('</ol>'); inOl = false } out.push('<ul>'); inUl = true }
-      out.push(`<li>${inline(ulMatch[1])}</li>`)
-      continue
-    }
-
-    // Ordered list
-    const olMatch = line.match(/^\d+\. (.+)$/)
-    if (olMatch) {
-      if (!inOl) { if (inUl) { out.push('</ul>'); inUl = false } out.push('<ol>'); inOl = true }
-      out.push(`<li>${inline(olMatch[1])}</li>`)
-      continue
-    }
-
-    // Empty line
-    if (line === '') { closeList(); out.push('<br />'); continue }
-
-    // Regular paragraph line
-    closeList()
-    out.push(`<span>${inline(line)}</span><br />`)
-  }
-
-  closeList()
-  return out.join('')
+// Strip emojis from a string
+function stripEmoji(s: string): string {
+  return s
+    .replace(/[\u{1F000}-\u{1FFFF}]|[\u{2600}-\u{27BF}]|[\u{FE00}-\u{FE0F}]|[\u{1F900}-\u{1F9FF}]/gu, '')
+    .replace(/\s{2,}/g, ' ')
+    .trim()
 }
 
-function inline(s: string): string {
-  return s
+// Inline formatting only (bold, italic, code)
+function inlineFmt(s: string): string {
+  return stripEmoji(s)
     .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
     .replace(/\*(.*?)\*/g, '<em>$1</em>')
     .replace(/`([^`]+)`/g, '<code>$1</code>')
-    // strip any remaining emoji that sneak through inline
-    .replace(/[\u{1F000}-\u{1FFFF}]|[\u{2600}-\u{27BF}]/gu, '')
+}
+
+// Parse a pipe-delimited table row into cells, stripping leading/trailing pipes
+function parseTableRow(line: string): string[] {
+  return line
+    .replace(/^\||\|$/g, '')
+    .split('|')
+    .map(c => c.trim())
+}
+
+function isTableSeparator(line: string): boolean {
+  return /^\|?[\s|:-]+\|$/.test(line) && line.includes('-')
+}
+
+function renderMarkdown(text: string): string {
+  const lines = stripEmoji(text).split('\n')
+  const out: string[] = []
+  let inUl    = false
+  let inOl    = false
+  let inTable = false
+  let tableHeaderDone = false
+
+  function closeList() {
+    if (inUl) { out.push('</ul>');    inUl = false }
+    if (inOl) { out.push('</ol>');    inOl = false }
+  }
+  function closeTable() {
+    if (inTable) { out.push('</tbody></table>'); inTable = false; tableHeaderDone = false }
+  }
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i].trim()
+
+    // ── Table rows ────────────────────────────────────────────────────────────
+    if (line.startsWith('|') && line.endsWith('|')) {
+      if (isTableSeparator(line)) {
+        // This is the header separator — close thead, open tbody
+        if (inTable && !tableHeaderDone) {
+          out.push('</tr></thead><tbody>')
+          tableHeaderDone = true
+        }
+        continue
+      }
+
+      const cells = parseTableRow(line)
+
+      if (!inTable) {
+        closeList()
+        out.push('<table><thead><tr>')
+        cells.forEach(c => out.push(`<th>${inlineFmt(c)}</th>`))
+        inTable = true
+        // don't push </tr> yet — wait for separator line to confirm it's a header
+        continue
+      }
+
+      if (inTable && !tableHeaderDone) {
+        // Second pipe row before separator — treat first row as already opened, add this as another header
+        cells.forEach(c => out.push(`<th>${inlineFmt(c)}</th>`))
+        continue
+      }
+
+      // Body row
+      out.push('<tr>')
+      cells.forEach(c => out.push(`<td>${inlineFmt(c)}</td>`))
+      out.push('</tr>')
+      continue
+    }
+
+    // Non-table line — close table if open
+    closeTable()
+
+    // ── Horizontal rule (must not be a table separator context) ───────────────
+    if (/^---+$/.test(line)) { closeList(); out.push('<hr />'); continue }
+
+    // ── Headers ───────────────────────────────────────────────────────────────
+    const hMatch = line.match(/^#{1,3} (.+)$/)
+    if (hMatch) {
+      closeList()
+      const size = (line.match(/^(#+)/)?.[1].length ?? 1) === 1 ? 'text-[13px]' : 'text-[12px]'
+      out.push(`<p class="mt-3 mb-1 ${size} font-semibold text-[#f0f4f8]">${inlineFmt(hMatch[1])}</p>`)
+      continue
+    }
+
+    // ── Unordered list ────────────────────────────────────────────────────────
+    const ulMatch = line.match(/^[-*] (.+)$/)
+    if (ulMatch) {
+      if (!inUl) { if (inOl) { out.push('</ol>'); inOl = false } out.push('<ul>'); inUl = true }
+      out.push(`<li>${inlineFmt(ulMatch[1])}</li>`)
+      continue
+    }
+
+    // ── Ordered list ──────────────────────────────────────────────────────────
+    const olMatch = line.match(/^\d+\. (.+)$/)
+    if (olMatch) {
+      if (!inOl) { if (inUl) { out.push('</ul>'); inUl = false } out.push('<ol>'); inOl = true }
+      out.push(`<li>${inlineFmt(olMatch[1])}</li>`)
+      continue
+    }
+
+    // ── Empty line ────────────────────────────────────────────────────────────
+    if (line === '') { closeList(); out.push('<br />'); continue }
+
+    // ── Plain text ────────────────────────────────────────────────────────────
+    closeList()
+    out.push(`<span>${inlineFmt(line)}</span><br />`)
+  }
+
+  closeList()
+  closeTable()
+  return out.join('')
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -406,61 +462,60 @@ function MessageBubble({
 
 function EmptyState({ onSelect }: { onSelect: (p: string) => void }) {
   return (
-    <div className="flex flex-col items-center justify-center h-full gap-5 sm:gap-6 px-5 sm:px-6 py-6">
-      {/* Title */}
-      <div className="text-center">
-        <div className="flex items-center justify-center gap-2.5 mb-3">
-          <svg width="22" height="22" viewBox="0 0 20 20" fill="none">
-            <path d="M1 2 L10 7 L17 4 L15 8 L19 10 L15 14 L10 18 L6 14 Z"
-              fill="#f0f4f8" fillOpacity="0.7" />
-          </svg>
-          <span className="text-[18px] font-medium text-[#f0f4f8] tracking-[-0.01em]">
-            Vulcan OmniPro 220
-          </span>
-        </div>
-        <p className="text-[13px] text-[#4a5568] max-w-xs leading-relaxed">
-          Ask about specs, polarity setup, troubleshooting, or welding procedures.
-          Answers pull from structured knowledge — not guesses.
-        </p>
-        {/* Feature pills — hidden on mobile */}
-        <div className="hidden sm:flex items-center justify-center flex-wrap gap-1.5 mt-3">
-          {[
-            { icon: <Database size={9} />,  label: 'Exact specs' },
-            { icon: <Zap size={9} />,       label: 'Polarity diagrams' },
-            { icon: <ImageIcon size={9} />, label: 'Manual pages' },
-            { icon: <BarChart2 size={9} />, label: 'Interactive visuals' },
-            { icon: <Camera size={9} />,    label: 'Weld Scanner' },
-          ].map((f) => (
-            <span key={f.label}
-              className="inline-flex items-center gap-1 text-[10px] text-[#4a5568] bg-[#141c24] border border-[#1e2b3a] rounded-full px-2 py-0.5">
-              {f.icon}<span>{f.label}</span>
-            </span>
-          ))}
-        </div>
+    <div className="flex flex-col items-center justify-center h-full px-5 sm:px-6 py-8">
+      {/* ── Wordmark ── */}
+      <div className="flex items-center gap-2.5 mb-2">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <path d="M1 2 L10 7 L17 4 L15 8 L19 10 L15 14 L10 18 L6 14 Z"
+            fill="#f0f4f8" fillOpacity="0.7" />
+        </svg>
+        <span className="text-[17px] font-medium text-[#f0f4f8] tracking-[-0.01em]">
+          Vulcan OmniPro 220
+        </span>
       </div>
 
-      {/* Suggested question cards — 1-col mobile, 2-col sm+ */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 w-full max-w-md">
+      {/* ── Subtitle ── */}
+      <p className="text-[12px] text-[#4a5568] text-center max-w-[280px] leading-relaxed mb-5">
+        Ask about specs, polarity, troubleshooting, or setup procedures.
+        Every answer is sourced from structured knowledge.
+      </p>
+
+      {/* ── Feature pills ── */}
+      <div className="hidden sm:flex items-center justify-center flex-wrap gap-1.5 mb-6">
+        {[
+          { icon: <Database size={9} />,  label: 'Exact specs' },
+          { icon: <Zap size={9} />,       label: 'Polarity diagrams' },
+          { icon: <ImageIcon size={9} />, label: 'Manual pages' },
+          { icon: <BarChart2 size={9} />, label: 'Interactive visuals' },
+          { icon: <Camera size={9} />,    label: 'Weld Scanner' },
+        ].map((f) => (
+          <span key={f.label}
+            className="inline-flex items-center gap-1 text-[10px] text-[#4a5568] bg-[#141c24] border border-[#1e2b3a] rounded-full px-2 py-0.5">
+            {f.icon}<span>{f.label}</span>
+          </span>
+        ))}
+      </div>
+
+      {/* ── Suggestion cards — strictly 2×2, equal height ── */}
+      <div className="grid grid-cols-2 gap-2 w-full max-w-[400px]">
         {SUGGESTED.map((s) => (
           <button
             key={s.label}
             onClick={() => onSelect(s.prompt)}
-            className="group text-left px-3.5 py-3 rounded-lg bg-[#141c24] border border-[#1e2b3a]
-              hover:border-[#243040] hover:bg-[#1a2332] hover:-translate-y-0.5 hover:shadow-[0_4px_16px_rgba(0,0,0,0.4)]
-              active:bg-[#1a2332] active:translate-y-0
-              transition-all duration-150 touch-manipulation"
+            className="group text-left px-3 py-3 rounded-lg bg-[#141c24] border border-[#1e2b3a]
+              hover:border-[#243040] hover:bg-[#1a2332] hover:-translate-y-0.5
+              hover:shadow-[0_4px_16px_rgba(0,0,0,0.4)]
+              active:translate-y-0 active:bg-[#1a2332]
+              transition-all duration-150 touch-manipulation
+              flex flex-col justify-between min-h-[72px]"
           >
-            <div className="flex items-start justify-between gap-2">
-              <span className="text-[12px] font-medium text-[#8892a4] group-hover:text-[#c4cdd8] leading-snug transition-colors">
-                {s.label}
-              </span>
-              <ChevronRight size={12} className="text-[#2d3f52] group-hover:text-[#4a5568] mt-0.5 flex-shrink-0 transition-colors" />
-            </div>
-            <p className="text-[11px] text-[#4a5568] mt-1 leading-snug line-clamp-2">{s.prompt}</p>
+            <span className="text-[11px] font-medium text-[#8892a4] group-hover:text-[#c4cdd8] leading-snug transition-colors">
+              {s.label}
+            </span>
+            <p className="text-[10px] text-[#4a5568] mt-1.5 leading-snug line-clamp-2">{s.prompt}</p>
           </button>
         ))}
       </div>
-
     </div>
   )
 }

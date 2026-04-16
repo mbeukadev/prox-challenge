@@ -193,76 +193,77 @@ const FRONT_PANEL_HOTSPOTS: Hotspot[] = [
 ]
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Hotspot data — Interior (product-inside.webp)
+// Hotspot data — Interior (page-09-interior-controls.png)
+// Positions calibrated to the labeled diagram on page 9
 // ─────────────────────────────────────────────────────────────────────────────
 
 const INTERIOR_HOTSPOTS: Hotspot[] = [
   {
-    id: 'settings_chart',
-    label: 'Settings Reference Chart',
-    shortLabel: 'Chart',
-    x: 50, y: 22,
-    description: 'Laminated quick-reference chart printed on the inside door panel. Shows recommended settings for MIG, Flux-Cored, TIG, and Stick across common material thicknesses.',
-    importance: 'high',
-    tips: [
-      'Use as your starting baseline — fine-tune from there',
-      'Shows duty cycle ratings per process at a glance',
-      'Open the door and prop it while setting up a new process',
-    ],
-  },
-  {
     id: 'wire_spool',
     label: 'Wire Spool Hub',
-    shortLabel: 'Spool Hub',
-    x: 32, y: 65,
-    description: 'Accepts 4" (1–2 lb) spools directly, or 8" (10–12 lb) spools with the included plastic adapter. Center the spool on the hub and tighten the retaining nut.',
+    shortLabel: 'Spool',
+    x: 19, y: 47,
+    description: 'Accepts 4" (1–2 lb) spools directly, or 8" (10–12 lb) spools with the included plastic adapter. Center the spool on the hub and hand-tighten the retaining nut.',
     importance: 'high',
     tips: [
       'Hand-tighten the retaining nut only — over-tightening causes wire drag',
-      'Use the plastic adapter for 8" spools (stored in the storage compartment)',
+      'Use the plastic adapter for 8" spools',
       'Feed 6" of wire through the liner before closing the door on a new spool',
     ],
   },
   {
-    id: 'drive_rolls',
-    label: 'Drive Roll Assembly',
-    shortLabel: 'Drive Rolls',
-    x: 62, y: 62,
-    description: 'Feeds wire from the spool through the liner to the gun. V-Groove rolls for solid MIG wire. Knurled rolls for flux-cored wire. The roll type is stamped on the roll.',
-    importance: 'critical',
-    safetyNote: 'Wrong roll type = wire slippage or deformation. V-Groove for solid wire (smooth channel). Knurled for flux-cored wire (serrated grip).',
-    tips: [
-      'Check the stamp on the roll — "V" for solid, "K" for knurled',
-      'Clean rolls monthly with a stiff wire brush',
-      'Worn grooves cause bird\'s nesting — inspect if you see feed problems',
-    ],
-  },
-  {
     id: 'tension_knob',
-    label: 'Wire Tension Adjustment',
+    label: 'Feed Tensioner',
     shortLabel: 'Tension',
-    x: 33, y: 57,
+    x: 79, y: 27,
     description: 'Controls the grip pressure the drive rolls apply to the wire. The #1 cause of bird\'s nesting is incorrect tension — too tight crushes flux-cored wire, too loose causes slippage.',
     importance: 'critical',
-    safetyNote: 'Set tension to minimum pressure that prevents wire slippage. Excess tension on flux-cored wire crushes the flux core and causes severe feed problems.',
+    safetyNote: 'Set to minimum pressure that prevents slippage. Excess tension on flux-cored wire crushes the flux core and causes severe feed problems.',
     tips: [
       'Start at minimum, increase by quarter-turns until feed is consistent',
       'Test: hold gun 2" from metal, pull trigger — wire should feed without slipping',
       'Flux-cored wire needs less tension than solid wire',
-      'Re-check tension whenever you change wire spool or wire type',
+      'Re-check whenever you change wire type or spool',
+    ],
+  },
+  {
+    id: 'drive_rolls',
+    label: 'Wire Feed Mechanism',
+    shortLabel: 'Drive Rolls',
+    x: 37, y: 42,
+    description: 'Feeds wire from the spool through the liner to the gun. V-Groove rolls for solid MIG wire. Knurled rolls for flux-cored wire. The roll type is stamped on the roll face.',
+    importance: 'critical',
+    safetyNote: 'Wrong roll type = wire slippage or crush damage. V-Groove for solid wire. Knurled for flux-cored.',
+    tips: [
+      'Check the stamp on the roll — "V" for solid, "K" for knurled',
+      'Clean rolls monthly with a stiff wire brush',
+      'Worn grooves cause bird\'s nesting — replace if feed problems persist',
     ],
   },
   {
     id: 'wire_liner',
-    label: 'Wire Liner / Guide',
+    label: 'Wire Inlet Liner',
     shortLabel: 'Liner',
-    x: 50, y: 70,
-    description: 'Flexible conduit that guides wire from the drive rolls through the gun cable to the contact tip. A kinked or contaminated liner is a common cause of inconsistent wire feed.',
+    x: 34, y: 57,
+    description: 'Flexible conduit guiding wire from the drive rolls into the gun cable. A kinked or contaminated liner is a common cause of inconsistent wire feed.',
     importance: 'high',
     tips: [
-      'Inspect for kinks, especially near the gun connector',
-      'Replace if wire feed becomes rough or inconsistent after checking tension and rolls',
+      'Inspect for kinks near the gun connector',
+      'Replace if feed remains rough after checking tension and rolls',
       'Blow out with compressed air monthly',
+    ],
+  },
+  {
+    id: 'settings_chart',
+    label: 'Cold Wire Feed Switch',
+    shortLabel: 'Cold Feed',
+    x: 48, y: 19,
+    description: 'Advances wire through the gun without energizing the output. Use this to thread wire after a spool change without striking an arc.',
+    importance: 'high',
+    tips: [
+      'Hold the trigger on the gun while pressing this switch to thread wire',
+      'Saves contact tips — no need to strike a test arc after re-threading',
+      'Also useful for clearing a bird\'s nest in the drive rolls',
     ],
   },
 ]
@@ -283,10 +284,10 @@ const TABS = [
   {
     id: 'interior' as const,
     label: 'Interior',
-    image: '/product-inside.webp',
+    image: '/manual-pages/page-09-interior-controls.png',
     hotspots: INTERIOR_HOTSPOTS,
-    bgFit: 'cover' as const,
-    bgColor: '#0a0d10',
+    bgFit: 'contain' as const,
+    bgColor: '#ffffff',
   },
 ]
 
@@ -319,17 +320,19 @@ function HotspotPin({
   onClick: () => void
   inline: boolean
 }) {
-  const colorClass =
-    hotspot.importance === 'critical' ? 'border-[#f0f4f8] bg-[#f0f4f8]/20'
-    : hotspot.importance === 'high'    ? 'border-[#8892a4] bg-[#8892a4]/15'
-    :                                    'border-[#4a5568] bg-[#4a5568]/10'
+  const idleClass =
+    hotspot.importance === 'critical'
+      ? 'bg-[#0e1218] border-[#0e1218] shadow-[0_0_0_2px_rgba(240,244,248,0.5)]'
+      : hotspot.importance === 'high'
+        ? 'bg-[#1a2332] border-[#4a5568] shadow-[0_0_0_1px_rgba(255,255,255,0.2)]'
+        : 'bg-[#243040] border-[#4a5568]'
 
-  const activeColor =
-    hotspot.importance === 'critical' ? 'bg-[#f0f4f8] border-[#f0f4f8]'
-    : hotspot.importance === 'high'    ? 'bg-[#8892a4] border-[#8892a4]'
-    :                                    'bg-[#4a5568] border-[#4a5568]'
+  const activeClass =
+    hotspot.importance === 'critical'
+      ? 'bg-[#f0f4f8] border-[#f0f4f8] shadow-[0_0_0_4px_rgba(240,244,248,0.25)]'
+      : 'bg-[#8892a4] border-[#8892a4] shadow-[0_0_0_3px_rgba(136,146,164,0.25)]'
 
-  const pinSize = inline ? 'w-5 h-5' : 'w-6 h-6'
+  const pinSize  = inline ? 'w-5 h-5' : 'w-6 h-6'
   const fontSize = inline ? 'text-[8px]' : 'text-[9px]'
 
   return (
@@ -340,8 +343,8 @@ function HotspotPin({
         ${pinSize} rounded-full border-2 flex items-center justify-center
         transition-all duration-150 cursor-pointer z-10
         ${active || highlighted
-          ? `${activeColor} scale-125 shadow-[0_0_0_4px_rgba(240,244,248,0.15)]`
-          : `${colorClass} hover:scale-110`
+          ? `${activeClass} scale-125`
+          : `${idleClass} hover:scale-110 hover:brightness-125`
         }
         ${highlighted && !active ? 'animate-pulse' : ''}
       `}
@@ -440,10 +443,8 @@ export default function MachineExplorer({
     setActiveHotspot(prev => prev === id ? null : id)
   }
 
-  const containerHeight = inline ? '260px' : '360px'
-
   return (
-    <div className={`flex flex-col rounded-xl border border-[#1e2b3a] overflow-hidden bg-[#0e1218] ${inline ? '' : 'h-full'}`}>
+    <div className="flex flex-col rounded-xl border border-[#1e2b3a] overflow-hidden bg-[#0e1218]">
 
       {/* ── Header ─────────────────────────────────────────────────────── */}
       <div className="flex items-center justify-between px-4 py-2.5 border-b border-[#1e2b3a] flex-shrink-0">
@@ -481,22 +482,20 @@ export default function MachineExplorer({
       </div>
 
       {/* ── Image + hotspots ────────────────────────────────────────────── */}
+      {/* Use aspect-[3/4] to match portrait manual pages exactly — no fixed px height */}
       <div
-        className="relative flex-shrink-0 overflow-hidden"
-        style={{ height: containerHeight, backgroundColor: tab.bgColor }}
+        className="relative w-full overflow-hidden"
+        style={{ aspectRatio: '3/4', backgroundColor: tab.bgColor }}
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={tab.image}
           alt={tab.label}
-          className="w-full h-full"
-          style={{ objectFit: tab.bgFit }}
+          className="absolute inset-0 w-full h-full"
+          style={{ objectFit: 'contain' }}
         />
 
-        {/* Dark overlay to make pins more visible */}
-        <div className="absolute inset-0 bg-[#0e1218]/20 pointer-events-none" />
-
-        {/* Hotspot pins */}
+        {/* Hotspot pins — dark on white background for visibility */}
         {tab.hotspots.map(h => (
           <HotspotPin
             key={h.id}
@@ -508,26 +507,14 @@ export default function MachineExplorer({
           />
         ))}
 
-        {/* Tap-hint — only when nothing selected */}
+        {/* Tap-hint */}
         {!activeHotspot && (
           <div className="absolute bottom-2 left-1/2 -translate-x-1/2 pointer-events-none">
-            <span className="text-[10px] text-[#4a5568] bg-[#0e1218]/70 px-2 py-1 rounded-full">
+            <span className="text-[10px] text-[#4a5568] bg-[#0e1218]/80 px-2 py-1 rounded-full">
               Tap any pin to learn more
             </span>
           </div>
         )}
-
-        {/* Legend */}
-        <div className="absolute top-2 right-2 flex flex-col gap-1 pointer-events-none">
-          <div className="flex items-center gap-1">
-            <span className="w-2 h-2 rounded-full bg-[#f0f4f8]/20 border border-[#f0f4f8]" />
-            <span className="text-[9px] text-[#4a5568]">critical</span>
-          </div>
-          <div className="flex items-center gap-1">
-            <span className="w-2 h-2 rounded-full bg-[#8892a4]/15 border border-[#8892a4]" />
-            <span className="text-[9px] text-[#4a5568]">important</span>
-          </div>
-        </div>
       </div>
 
       {/* ── Detail panel ────────────────────────────────────────────────── */}

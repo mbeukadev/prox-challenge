@@ -282,7 +282,7 @@ export default function Home() {
           <div className="flex items-center gap-2">
             <span className="inline-flex items-center gap-1.5 text-[11px] text-[#4a5568]">
               <span className="w-1.5 h-1.5 rounded-full bg-[#22c55e] opacity-80" />
-              <span className="hidden sm:inline">claude-sonnet-4-6</span>
+              <span className="hidden sm:inline">Ready</span>
             </span>
           </div>
         </header>
