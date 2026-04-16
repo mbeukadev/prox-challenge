@@ -163,19 +163,27 @@ export async function POST(req: Request) {
           console.error('Agent stream error:', err)
 
           // Extract a clean message from Anthropic SDK errors
+          // SDK errors look like: "400 {"type":"error","error":{...}}" — strip HTTP status prefix first
           let message = err instanceof Error ? err.message : String(err)
           try {
-            const parsed = JSON.parse(message)
-            const inner = parsed?.error?.message || parsed?.message
-            if (inner) message = inner
+            const jsonMatch = message.match(/\{[\s\S]*\}/)
+            if (jsonMatch) {
+              const parsed = JSON.parse(jsonMatch[0])
+              const inner = parsed?.error?.message || parsed?.message
+              if (inner) message = inner
+            }
           } catch { /* not JSON, keep as-is */ }
 
           // Map known Anthropic error types to friendly messages
-          if (message.toLowerCase().includes('overload') || (err as { status?: number })?.status === 529) {
+          const status = (err as { status?: number })?.status
+          const low = message.toLowerCase()
+          if (low.includes('credit balance') || low.includes('billing') || low.includes('purchase credits')) {
+            message = 'API credits exhausted. Add credits at console.anthropic.com to continue.'
+          } else if (low.includes('overload') || status === 529) {
             message = 'The AI service is currently overloaded. Please wait a moment and try again.'
-          } else if ((err as { status?: number })?.status === 401) {
+          } else if (status === 401) {
             message = 'Invalid ANTHROPIC_API_KEY. Check your .env file.'
-          } else if ((err as { status?: number })?.status === 429) {
+          } else if (status === 429) {
             message = 'Rate limit reached. Please wait a moment and try again.'
           }
 

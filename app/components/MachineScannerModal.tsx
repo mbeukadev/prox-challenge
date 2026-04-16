@@ -95,9 +95,14 @@ export default function MachineScannerModal({ onClose, onCapture }: MachineScann
           <>
             {/* Decorative viewfinder header */}
             <div className="relative bg-[#080b0f] flex items-center justify-center" style={{ aspectRatio: '4/3' }}>
-              {/* Static machine image as backdrop */}
+              {/* Manual diagram zoomed in — no readable text, abstract scan feel */}
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/product.webp" alt="" className="absolute inset-0 w-full h-full object-cover opacity-20" />
+              <img
+                src="/manual-pages/page-08-front-panel-controls.png"
+                alt=""
+                className="absolute inset-0 w-full h-full object-cover opacity-30"
+                style={{ transform: 'scale(2.8)', transformOrigin: '55% 40%', filter: 'grayscale(30%) contrast(1.1)' }}
+              />
 
               {/* Viewfinder SVG */}
               <svg viewBox="0 0 320 240" className="absolute inset-0 w-full h-full" aria-hidden="true">
