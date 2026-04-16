@@ -1,7 +1,7 @@
 {
-  "name": "Vulcan OmniPro 220 Welding Assistant",
-  "short_name": "Weld Assistant",
-  "description": "AI-powered welding guide for the Vulcan OmniPro 220 multiprocess welder. Ask about specs, polarity, troubleshooting, and procedures.",
+  "name": "Prox — Vulcan OmniPro 220 Assistant",
+  "short_name": "Prox",
+  "description": "AI-powered welding guide for the Vulcan OmniPro 220 multiprocess welder.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#0e1218",
@@ -9,16 +9,16 @@
   "orientation": "portrait-primary",
   "icons": [
     {
-      "src": "/product.webp",
+      "src": "/icon-192.png",
       "sizes": "192x192",
-      "type": "image/webp",
+      "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/product.webp",
+      "src": "/icon-512.png",
       "sizes": "512x512",
-      "type": "image/webp",
-      "purpose": "maskable"
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ],
   "categories": ["utilities", "productivity"],

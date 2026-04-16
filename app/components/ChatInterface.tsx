@@ -462,11 +462,11 @@ function EmptyState({ onSelect }: { onSelect: (p: string) => void }) {
   return (
     <div className="flex flex-col items-center justify-center h-full px-5 sm:px-6 py-8">
       {/* ── Wordmark ── */}
-      <div className="flex items-center gap-3 mb-2">
+      <div className="flex flex-col items-center gap-2 mb-3">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/vulcanlogo.png" alt="Vulcan" style={{ height: '22px', width: 'auto' }} />
-        <span className="text-[17px] font-medium text-[#f0f4f8] tracking-[-0.01em]">
-          Vulcan OmniPro 220
+        <img src="/vulcanlogo.png" alt="Vulcan" style={{ height: '36px', width: 'auto' }} />
+        <span className="text-[13px] font-medium text-[#8892a4] tracking-widest uppercase">
+          OmniPro 220
         </span>
       </div>
 

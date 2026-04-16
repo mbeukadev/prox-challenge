@@ -2,13 +2,17 @@ import type { Metadata, Viewport } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'Vulcan OmniPro 220 — Welding Assistant',
+  title: 'Prox — Vulcan OmniPro 220 Assistant',
   description: 'AI-powered welding guide for the Vulcan OmniPro 220 multiprocess welder',
   manifest: '/manifest.json',
   appleWebApp: {
     capable: true,
     statusBarStyle: 'black-translucent',
-    title: 'Weld Assistant',
+    title: 'Prox',
+  },
+  icons: {
+    apple: '/apple-touch-icon.png',
+    icon: '/icon-512.png',
   },
 }
 

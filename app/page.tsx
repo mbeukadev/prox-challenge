@@ -28,10 +28,10 @@ import {
 
 function ProxLogo() {
   return (
-    <div className="flex items-center gap-3 px-5 py-4 select-none">
+    <div className="flex items-center px-5 py-4 select-none">
+      {/* Full prox wordmark — logo includes the text, no separate span needed */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src="/vulcanlogo.png" alt="Vulcan" style={{ height: '18px', width: 'auto' }} />
-      <span className="text-[15px] font-medium tracking-[-0.01em] text-[#f0f4f8]">prox</span>
+      <img src="/proxlogo.png" alt="prox" style={{ height: '22px', width: 'auto' }} />
     </div>
   )
 }
@@ -166,7 +166,7 @@ export default function Home() {
         <nav className="flex-1 overflow-y-auto py-1">
           <NavItem
             icon={<MessageSquare size={14} />}
-            label="Welding Assistant"
+            label="Prox Assistant"
             active={isChat}
             onClick={() => { setSidebarOpen(false); setView('chat') }}
           />
@@ -252,14 +252,13 @@ export default function Home() {
             </button>
 
             {/* Logo on mobile */}
-            <div className="flex items-center gap-2.5 md:hidden">
+            <div className="flex items-center md:hidden">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/vulcanlogo.png" alt="Vulcan" style={{ height: '16px', width: 'auto' }} />
-              <span className="text-[14px] font-medium text-[#f0f4f8] tracking-[-0.01em]">prox</span>
+              <img src="/proxlogo.png" alt="prox" style={{ height: '18px', width: 'auto' }} />
             </div>
 
             <h1 className="text-[15px] font-semibold text-[#f0f4f8] tracking-[-0.01em] hidden md:block">
-              {isGallery ? 'Manual Pages' : isExplorer ? 'Machine Explorer' : 'Welding Assistant'}
+              {isGallery ? 'Manual Pages' : isExplorer ? 'Machine Explorer' : 'Prox Assistant'}
             </h1>
 
             <div className="hidden md:flex items-center gap-1.5">
