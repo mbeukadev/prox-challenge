@@ -1,6 +1,7 @@
 'use client'
 
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import ChatInterface, { type ChatInterfaceHandle } from './components/ChatInterface'
 import ManualGallery from './components/ManualGallery'
 import { MachineExplorerPage } from './components/MachineExplorer'
@@ -101,10 +102,16 @@ type View = 'chat' | 'gallery' | 'explorer'
 // ─────────────────────────────────────────────────────────────────────────────
 
 export default function Home() {
+  const router = useRouter()
   const [sidebarOpen,  setSidebarOpen]  = useState(false)
   const [view,         setView]         = useState<View>('chat')
   const [scannerOpen,  setScannerOpen]  = useState(false)
   const [settingsOpen, setSettingsOpen] = useState(false)
+
+  // Auth guard — redirect to /login if no session
+  useEffect(() => {
+    if (!localStorage.getItem('prox_user')) router.replace('/login')
+  }, [router])
 
   const isExplorer = view === 'explorer'
   const chatRef = useRef<ChatInterfaceHandle>(null)

@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { X, ChevronRight, Cpu, BookOpen, CreditCard, Bell, Mic, Volume2, Wrench } from 'lucide-react'
 
 // ─── Toggle component ─────────────────────────────────────────────────────────
@@ -74,6 +75,12 @@ function Row({
 // ─── Main ─────────────────────────────────────────────────────────────────────
 
 export default function SettingsModal({ onClose }: { onClose: () => void }) {
+  const router = useRouter()
+
+  function signOut() {
+    localStorage.removeItem('prox_user')
+    router.replace('/login')
+  }
   // Preferences — persisted to localStorage
   const [voiceInput,  setVoiceInput]  = useState(false)
   const [autoSpeak,   setAutoSpeak]   = useState(false)
@@ -150,7 +157,7 @@ export default function SettingsModal({ onClose }: { onClose: () => void }) {
               icon={<ChevronRight size={13} />}
               label="Sign out"
               sub="mbeukadev@prox.inc"
-              onClick={() => {}}
+              onClick={signOut}
             />
           </div>
 
