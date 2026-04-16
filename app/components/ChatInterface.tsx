@@ -527,6 +527,7 @@ function EmptyState({ onSelect }: { onSelect: (p: string) => void }) {
 export interface ChatInterfaceHandle {
   sendMessage: (text: string) => void
   openScanner: () => void
+  receiveScannedImage: (base64: string, mimeType: string) => void
 }
 
 interface ChatInterfaceProps {
@@ -777,6 +778,10 @@ const ChatInterface = forwardRef<ChatInterfaceHandle, ChatInterfaceProps>(functi
   useImperativeHandle(ref, () => ({
     sendMessage,
     openScanner: () => scanInputRef.current?.click(),
+    receiveScannedImage: (base64: string, mimeType: string) => {
+      const preview = `data:${mimeType};base64,${base64}`
+      setPendingImage({ base64, mimeType, preview, source: 'scan' })
+    },
   }))
 
   const lastAsstId = [...messages].reverse().find((m) => m.role === 'assistant')?.id

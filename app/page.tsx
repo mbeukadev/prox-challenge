@@ -302,7 +302,10 @@ export default function Home() {
       {scannerOpen && (
         <MachineScannerModal
           onClose={() => setScannerOpen(false)}
-          onLaunch={() => chatRef.current?.openScanner()}
+          onCapture={(b64, mime) => {
+            setScannerOpen(false)
+            chatRef.current?.receiveScannedImage(b64, mime)
+          }}
         />
       )}
       {settingsOpen && (

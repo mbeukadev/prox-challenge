@@ -7,24 +7,27 @@ import { X, ChevronRight, Cpu, BookOpen, CreditCard, Bell, Mic, Volume2, Wrench 
 
 function Toggle({ enabled, onChange }: { enabled: boolean; onChange: (v: boolean) => void }) {
   return (
-    <button
-      onClick={() => onChange(!enabled)}
-      className={`
-        relative w-8 h-4.5 rounded-full transition-colors duration-200 flex-shrink-0 touch-manipulation
-        ${enabled ? 'bg-[#f0f4f8]' : 'bg-[#243040]'}
-      `}
-      style={{ height: '18px', width: '32px' }}
-      role="switch"
-      aria-checked={enabled}
-    >
-      <span
-        className={`
-          absolute top-0.5 w-3.5 h-3.5 rounded-full transition-transform duration-200
-          ${enabled ? 'bg-[#0e1218] translate-x-[15px]' : 'bg-[#4a5568] translate-x-0.5'}
+    <div className="flex items-center gap-1.5 flex-shrink-0">
+      <span className={`text-[10px] font-medium w-5 text-right transition-colors ${enabled ? 'text-[#f0f4f8]' : 'text-[#2d3f52]'}`}>
+        {enabled ? 'On' : 'Off'}
+      </span>
+      <button
+        onClick={() => onChange(!enabled)}
+        className={`relative rounded-full transition-colors duration-200 touch-manipulation border
+          ${enabled ? 'bg-[#e2e8f0] border-[#e2e8f0]' : 'bg-[#0e1218] border-[#243040]'}
         `}
-        style={{ height: '14px', width: '14px' }}
-      />
-    </button>
+        style={{ height: '22px', width: '40px' }}
+        role="switch"
+        aria-checked={enabled}
+      >
+        <span
+          className={`absolute top-[3px] rounded-full transition-all duration-200
+            ${enabled ? 'bg-[#0e1218] translate-x-[19px]' : 'bg-[#2d3f52] translate-x-[3px]'}
+          `}
+          style={{ height: '16px', width: '16px' }}
+        />
+      </button>
+    </div>
   )
 }
 
@@ -132,7 +135,7 @@ export default function SettingsModal({ onClose }: { onClose: () => void }) {
               </div>
               <div className="flex-1 min-w-0">
                 <p className="text-[12px] font-medium text-[#f0f4f8] leading-none">Matthew Beuka</p>
-                <p className="text-[10px] text-[#4a5568] mt-0.5">matthewbeuka@gmail.com</p>
+                <p className="text-[10px] text-[#4a5568] mt-0.5">mbeukadev@prox.inc</p>
               </div>
               <span className="text-[9px] font-semibold px-1.5 py-0.5 rounded bg-[#1a2332] border border-[#243040] text-[#8892a4] tracking-wider uppercase">
                 Pro
@@ -146,7 +149,7 @@ export default function SettingsModal({ onClose }: { onClose: () => void }) {
             <Row
               icon={<ChevronRight size={13} />}
               label="Sign out"
-              sub="matthewbeuka@gmail.com"
+              sub="mbeukadev@prox.inc"
               onClick={() => {}}
             />
           </div>
@@ -154,21 +157,14 @@ export default function SettingsModal({ onClose }: { onClose: () => void }) {
           {/* ── Billing ── */}
           <div>
             <Section label="Billing" />
-            <div className="px-4 py-3">
-              <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center justify-between px-4 py-3">
+              <div>
                 <p className="text-[12px] text-[#c4cdd8]">Current plan</p>
-                <span className="text-[10px] font-semibold text-[#f0f4f8] bg-[#1a2332] border border-[#243040] px-2 py-0.5 rounded">
-                  Pro — $29/mo
-                </span>
+                <p className="text-[10px] text-[#4a5568] mt-0.5">247 requests this month</p>
               </div>
-              <div className="flex items-center justify-between mb-3">
-                <p className="text-[10px] text-[#4a5568]">Requests this month</p>
-                <p className="text-[10px] text-[#8892a4] font-mono">247 / unlimited</p>
-              </div>
-              {/* Usage bar */}
-              <div className="w-full h-1 bg-[#1e2b3a] rounded-full overflow-hidden">
-                <div className="h-full bg-[#f0f4f8]/40 rounded-full" style={{ width: '24%' }} />
-              </div>
+              <span className="text-[9px] font-semibold px-2 py-0.5 rounded bg-[#1a2332] border border-[#243040] text-[#8892a4] tracking-wider uppercase">
+                Pro
+              </span>
             </div>
             <Row
               icon={<CreditCard size={13} />}
