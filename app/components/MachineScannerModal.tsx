@@ -95,13 +95,13 @@ export default function MachineScannerModal({ onClose, onCapture }: MachineScann
           <>
             {/* Decorative viewfinder header */}
             <div className="relative bg-[#080b0f] flex items-center justify-center" style={{ aspectRatio: '4/3' }}>
-              {/* Manual diagram zoomed in — no readable text, abstract scan feel */}
+              {/* Duty cycle chart zoomed way in — pure graph lines/bars, no brand text */}
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src="/manual-pages/page-08-front-panel-controls.png"
+                src="/manual-pages/page-19-duty-cycle-mig.png"
                 alt=""
-                className="absolute inset-0 w-full h-full object-cover opacity-30"
-                style={{ transform: 'scale(2.8)', transformOrigin: '55% 40%', filter: 'grayscale(30%) contrast(1.1)' }}
+                className="absolute inset-0 w-full h-full object-cover opacity-25"
+                style={{ transform: 'scale(3.2)', transformOrigin: '50% 60%', filter: 'grayscale(20%) contrast(1.15)' }}
               />
 
               {/* Viewfinder SVG */}

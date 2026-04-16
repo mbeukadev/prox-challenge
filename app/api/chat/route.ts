@@ -4,8 +4,11 @@ import { TOOL_DEFINITIONS, executeTool } from '@/lib/tools'
 
 export const runtime = 'nodejs'
 
+// prompt-caching-2024-07-31 caches the static system prompt across requests
+// Cached input tokens cost ~10% of normal — up to 90% savings on repeated content
 const client = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
+  defaultHeaders: { 'anthropic-beta': 'prompt-caching-2024-07-31' },
 })
 
 const SYSTEM_PROMPT = `You are an expert technician for the Vulcan OmniPro 220 multiprocess welder (Harbor Freight model 57812). You assist with all four welding processes: MIG (GMAW), Flux-Cored (FCAW), TIG (GTAW), and Stick (SMAW).
@@ -76,10 +79,13 @@ async function runAgentStream(
       { id: string; name: string; inputJson: string }
     >()
 
-    const stream = client.messages.stream({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const stream = (client.messages as any).stream({
       model: 'claude-sonnet-4-6',
       max_tokens: 2048,
-      system: SYSTEM_PROMPT,
+      // cache_control marks the system prompt for caching (beta feature)
+      // First request pays full price; subsequent requests hit cache at ~10% cost
+      system: [{ type: 'text', text: SYSTEM_PROMPT, cache_control: { type: 'ephemeral' } }],
       tools: TOOL_DEFINITIONS,
       messages: workingMessages,
     })
